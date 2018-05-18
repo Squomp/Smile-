@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String SELECTED_ITEM = "navigation_home";
     private BottomNavigationView mBottomNav;
     private int mSelectedItemInt;
 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         mSelectedItemInt = item.getItemId();
 
         // init corresponding fragment
-        switch (item.getItemId()) {
+        switch (mSelectedItemInt) {
             case R.id.navigation_home:
                 frag = HomeFragment.newInstance();
                 break;
@@ -59,6 +58,17 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container, frag, frag.getTag());
             ft.commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        MenuItem homeItem = mBottomNav.getMenu().getItem(0);
+        if (mSelectedItemInt != homeItem.getItemId()) {
+            // select home item
+            mBottomNav.setSelectedItemId(homeItem.getItemId());
+        } else {
+            super.onBackPressed();
         }
     }
 }
