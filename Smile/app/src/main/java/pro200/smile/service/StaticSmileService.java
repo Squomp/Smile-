@@ -34,4 +34,14 @@ public class StaticSmileService implements SmileService {
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_smile_black_24dp)));
         return smileList;
     }
+
+    @Override
+    public void LoginOrCreate(String id) {
+        /* do nothing */
+    }
+
+    @Override
+    public void AddSmile() {
+        /* do nothing */
+    }
 }
