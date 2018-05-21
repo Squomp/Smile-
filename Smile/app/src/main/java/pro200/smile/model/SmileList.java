@@ -1,12 +1,13 @@
 package pro200.smile.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SmileList {
 
-    public ArrayList<Smile> smiles;
+    public List<Smile> smiles;
 
-    public ArrayList<Smile> getSmiles() {
+    public List<Smile> getSmiles() {
         return smiles;
     }
 
