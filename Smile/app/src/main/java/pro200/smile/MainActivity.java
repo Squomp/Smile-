@@ -8,8 +8,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import pro200.smile.service.SmileService;
+import pro200.smile.service.StaticSmileService;
+
 public class MainActivity extends AppCompatActivity {
 
+    private SmileService service = new StaticSmileService(getApplicationContext());
     private BottomNavigationView mBottomNav;
     private int mSelectedItemInt;
 
