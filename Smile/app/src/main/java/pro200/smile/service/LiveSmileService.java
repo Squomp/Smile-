@@ -19,7 +19,7 @@ public class LiveSmileService implements SmileService {
     private String smileDB = "SmileDB";
     private String userSmilesProperty = "SmileList";
     private String idProperty = "id";
-
+    
     private Context context;
 
     public LiveSmileService(Context context) {

@@ -7,10 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/title_home"
-        android:src="@android:drawable/btn_star_big_on" />
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/happybeach" />
+
 </FrameLayout>
