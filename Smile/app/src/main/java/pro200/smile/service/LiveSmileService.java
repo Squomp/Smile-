@@ -19,7 +19,7 @@ public class LiveSmileService implements SmileService {
     private String smileDB = "SmileDB";
     private String userSmilesProperty = "SmileList";
     private String idProperty = "id";
-    
+
     private Context context;
 
     public LiveSmileService(Context context) {
@@ -104,13 +104,13 @@ public class LiveSmileService implements SmileService {
         }
 
         // Create a new document (i.e. a record) in the database.
-        MutableDocument mutableDoc = new MutableDocument()
-                .setBlob(/* blob stuff*/);
+//        MutableDocument mutableDoc = new MutableDocument()
+//                .setBlob(/* blob stuff*/);
 
-        try {
-            smileDatabase.save(mutableDoc);
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            smileDatabase.save(mutableDoc);
+//        } catch (CouchbaseLiteException e) {
+//            e.printStackTrace();
+//        }
     }
 }
