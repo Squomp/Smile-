@@ -13,7 +13,7 @@ import pro200.smile.service.StaticSmileService;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SmileService service = new StaticSmileService(getApplicationContext());
+    private SmileService service;
     private BottomNavigationView mBottomNav;
     private int mSelectedItemInt;
 
@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        service = new StaticSmileService(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

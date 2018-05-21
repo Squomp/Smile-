@@ -17,7 +17,7 @@ import pro200.smile.model.SmileList;
 public class LiveSmileService implements SmileService {
 
     private String userDB = "Users";
-    private String smileDB = "Smiles"
+    private String smileDB = "Smiles";
     private Context context;
 
     public LiveSmileService(Context context) {
