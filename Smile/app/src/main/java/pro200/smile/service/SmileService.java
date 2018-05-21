@@ -5,6 +5,6 @@ import pro200.smile.model.SmileList;
 
 public interface SmileService {
 
-    SmileList GetUserSmiles();
+    SmileList GetUserSmiles(String id);
     SmileList GetRandomSmiles(int count);
 }
