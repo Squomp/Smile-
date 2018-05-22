@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -38,7 +39,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 });
-        setContentView(R.layout.activity_login);
+        if (AccessToken.getCurrentAccessToken() != null) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        }
+        else {
+            setContentView(R.layout.activity_login);
+        }
     }
 
     @Override

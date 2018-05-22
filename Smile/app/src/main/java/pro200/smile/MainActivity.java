@@ -13,7 +13,7 @@ import pro200.smile.service.StaticSmileService;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private SmileService service = new StaticSmileService(getApplicationContext());
+    private SmileService service;
     private BottomNavigationView mBottomNav;
     private int mSelectedItemInt;
 
