@@ -1,6 +1,7 @@
 package pro200.smile.service;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.util.Date;
@@ -41,7 +42,7 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile() {
+    public void AddSmile(String id, Bitmap smile) {
         /* do nothing */
     }
 }

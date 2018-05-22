@@ -1,6 +1,10 @@
 package pro200.smile.service;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.provider.ContactsContract;
+
+import com.couchbase.lite.Blob;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.DataSource;
 import com.couchbase.lite.Database;
@@ -12,23 +16,22 @@ import com.couchbase.lite.QueryBuilder;
 import com.couchbase.lite.ResultSet;
 import com.couchbase.lite.SelectResult;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Date;
+
 import pro200.smile.model.SmileList;
 
 public class LiveSmileService implements SmileService {
 
     private String smileDB = "SmileDB";
     private String userSmilesProperty = "SmileList";
-    private String idProperty = "id";
 
     private Context context;
+    private Database database;
 
     public LiveSmileService(Context context) {
         this.context = context;
-    }
-
-    @Override
-    public SmileList GetUserSmiles(String id) {
-        // Get the database (and create it if it doesn’t exist).
         DatabaseConfiguration config = new DatabaseConfiguration(context);
         Database database = null;
         try {
@@ -36,17 +39,19 @@ public class LiveSmileService implements SmileService {
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
+    }
 
-        // Create a query to fetch documents of type SDK.
-        Query query = QueryBuilder.select(SelectResult.property(userSmilesProperty))
-                .from(DataSource.database(database))
-                .where(Expression.property(idProperty).equalTo(Expression.string(id)));
-        ResultSet result = null;
-        try {
-            result = query.execute();
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public SmileList GetUserSmiles(String id) {
+//        Query query = QueryBuilder.select(SelectResult.property(userSmilesProperty))
+//                .from(DataSource.database(database))
+//                .where(Expression.property(idProperty).equalTo(Expression.string(id)));
+//        ResultSet result = null;
+//        try {
+//            result = query.execute();
+//        } catch (CouchbaseLiteException e) {
+//            e.printStackTrace();
+//        }
 
         return null;
     }
@@ -58,30 +63,8 @@ public class LiveSmileService implements SmileService {
 
     @Override
     public void LoginOrCreate(String id) {
-        // Get the database (and create it if it doesn’t exist).
-        DatabaseConfiguration config = new DatabaseConfiguration(context);
-        Database database = null;
-        try {
-            database = new Database(smileDB, config);
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
-
-        // Create a query to fetch documents of type SDK.
-        Query query = QueryBuilder.select(SelectResult.property(idProperty))
-                .from(DataSource.database(database))
-                .where(Expression.property(idProperty).equalTo(Expression.string(id)));
-        ResultSet result = null;
-        try {
-            result = query.execute();
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
-        /* not sure if execute will return null or empty if nothing is found */
-        if (result == null || result.allResults().isEmpty()) {
-            // Create a new document (i.e. a record) in the database.
-            MutableDocument mutableDoc = new MutableDocument()
-                    .setString(idProperty, id)
+        if (database.getDocument(id) == null) {
+            MutableDocument mutableDoc = new MutableDocument(id)
                     .setString("type", "user");
 
             try {
@@ -93,22 +76,17 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id) {
-        // Get the database (and create it if it doesn’t exist).
-        DatabaseConfiguration config = new DatabaseConfiguration(context);
-        Database smileDatabase = null;
-        try {
-            smileDatabase = new Database(smileDB, config);
-        } catch (CouchbaseLiteException e) {
-            e.printStackTrace();
-        }
-
-        // Create a new document (i.e. a record) in the database.
+    public void AddSmile(String id, Bitmap smile) {
+//        ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+//        Blob b = new Blob("image/jpg", in);
+//
 //        MutableDocument mutableDoc = new MutableDocument()
-//                .setBlob(/* blob stuff*/);
-
+//                .setBlob("")
+//                .setValue("postedDate", new Date());
+//
 //        try {
-//            smileDatabase.save(mutableDoc);
+//            database.save(mutableDoc);
 //        } catch (CouchbaseLiteException e) {
 //            e.printStackTrace();
 //        }
