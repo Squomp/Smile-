@@ -1,6 +1,7 @@
 package pro200.smile.service;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.util.Date;
@@ -18,7 +19,7 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public SmileList GetUserSmiles() {
+    public SmileList GetUserSmiles(String id) {
         SmileList smileList = new SmileList();
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
@@ -33,5 +34,15 @@ public class StaticSmileService implements SmileService {
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_smile_black_24dp)));
         return smileList;
+    }
+
+    @Override
+    public void LoginOrCreate(String id) {
+        /* do nothing */
+    }
+
+    @Override
+    public void AddSmile(String id, Bitmap smile) {
+        /* do nothing */
     }
 }
