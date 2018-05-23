@@ -45,4 +45,9 @@ public class StaticSmileService implements SmileService {
     public void AddSmile(String id, Bitmap smile) {
         /* do nothing */
     }
+
+    @Override
+    public void changePreference(String id, String newPreference) {
+
+    }
 }
