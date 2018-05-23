@@ -3,13 +3,20 @@ package pro200.smile;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,11 +46,11 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 });
-        if (AccessToken.getCurrentAccessToken() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        }
-        else {
+        if (AccessToken.getCurrentAccessToken() == null) {
             setContentView(R.layout.activity_login);
+        } else {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         }
     }
 
@@ -52,6 +59,5 @@ public class LoginActivity extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
     }
-
 
 }
