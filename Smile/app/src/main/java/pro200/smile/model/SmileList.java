@@ -11,6 +11,10 @@ public class SmileList {
         return smiles;
     }
 
+    public void setSmiles(List<Smile> sl) {
+        smiles = sl;
+    }
+
     public void addSmile(Smile s) {
         smiles.add(s);
     }

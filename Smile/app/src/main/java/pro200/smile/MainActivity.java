@@ -6,7 +6,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import pro200.smile.service.SmileService;
 import pro200.smile.service.StaticSmileService;
