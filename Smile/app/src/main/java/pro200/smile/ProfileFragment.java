@@ -3,6 +3,7 @@ package pro200.smile;
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,15 +47,23 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mContent = view.findViewById(R.id.profile_content);
+        profileImageView = view.findViewById(R.id.imageView);
         if (savedInstanceState == null) {
             Bundle args = getArguments();
 
-            // initialize views
-            mContent = view.findViewById(R.id.profile_content);
-            profileImageView = view.findViewById(R.id.imageView);
             Profile profile = Profile.getCurrentProfile();
             new LoadProfileImage(profileImageView).execute(profile.getProfilePictureUri(300, 300).toString());
         }
+        else {
+            profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putParcelable("ProfileBitmap", ((BitmapDrawable)profileImageView.getDrawable()).getBitmap());
     }
 }
 
