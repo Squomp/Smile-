@@ -14,17 +14,17 @@
         android:contentDescription="@string/title_profile"
         android:src="@android:drawable/btn_star_big_off" />
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
+        android:id="@+id/smileScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="140dp"
-        android:fillViewport="true">
+        android:layout_marginTop="145dp">
 
         <LinearLayout
             android:id="@+id/userSmiles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 </FrameLayout>

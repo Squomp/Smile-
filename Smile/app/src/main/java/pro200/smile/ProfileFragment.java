@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.facebook.Profile;
 
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
 import pro200.smile.service.LiveSmileService;
 
@@ -45,8 +48,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         service = new LiveSmileService(this.getContext());
-        smiles = service.GetUserSmiles("boi");
-
+        service.LoginOrCreate("boi");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -65,6 +67,14 @@ public class ProfileFragment extends Fragment {
         }
         else {
             profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
+        }
+
+        smiles = service.GetUserSmiles("boi");
+        LinearLayout layout = view.findViewById(R.id.userSmiles);
+        for (Smile s : smiles.getSmiles()) {
+            ImageView img = new ImageView(this.getContext());
+            img.setImageBitmap(s.getImage());
+            layout.addView(img);
         }
     }
 
