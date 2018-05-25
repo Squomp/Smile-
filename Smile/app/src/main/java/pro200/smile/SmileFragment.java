@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import pro200.smile.model.Smile;
+import pro200.smile.model.SmileList;
 import pro200.smile.service.LiveSmileService;
 
 import static android.app.Activity.RESULT_OK;
@@ -89,8 +91,14 @@ public class SmileFragment extends Fragment {
                 Log.d("BITMAPS", "Could not retrieve most Recent Image");
             }
 
-            mImageView.setImageBitmap(imageBitmap);
-            //LiveSmileService ls =  new LiveSmileService(this.getContext());
+//            mImageView.setImageBitmap(imageBitmap);
+            LiveSmileService ls =  new LiveSmileService(this.getContext());
+            ls.LoginOrCreate("YEET");
+            ls.AddSmile("YEET", imageBitmap);
+            SmileList retrievedList = ls.GetUserSmiles("YEET");
+
+            Smile newSmile = retrievedList.getSmiles().get(0);
+            mImageView.setImageBitmap(newSmile.getImage());
 
         }
     }

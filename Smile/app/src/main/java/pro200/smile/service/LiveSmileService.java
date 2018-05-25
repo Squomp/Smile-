@@ -43,7 +43,7 @@ public class LiveSmileService implements SmileService {
     public LiveSmileService(Context context) {
         this.context = context;
         DatabaseConfiguration config = new DatabaseConfiguration(context);
-        Database database = null;
+        database = null;
         try {
             database = new Database(smileDB, config);
         } catch (CouchbaseLiteException e) {
@@ -135,7 +135,7 @@ public class LiveSmileService implements SmileService {
         }
 
         MutableDocument userDoc = database.getDocument(id).toMutable();
-        userDoc.getArray("smiles").toMutable().addString(smileDoc.getId());
+        userDoc.getArray("smiles").addString(smileDoc.getId());
         try {
             database.save(userDoc);
         } catch (CouchbaseLiteException e) {
