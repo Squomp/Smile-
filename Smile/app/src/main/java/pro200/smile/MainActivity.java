@@ -1,29 +1,26 @@
 package pro200.smile;
 
-import android.content.pm.PackageManager;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.Profile;
+import java.util.Calendar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import pro200.smile.service.NotificationReceiver;
 import pro200.smile.service.SmileService;
 import pro200.smile.service.StaticSmileService;
 
 public class MainActivity extends AppCompatActivity {
 
     private SmileService service;
+    private PendingIntent pendingIntent;
     private BottomNavigationView mBottomNav;
     private int mSelectedItemInt;
 
@@ -46,8 +43,24 @@ public class MainActivity extends AppCompatActivity {
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        startNotification();
         MenuItem selectedItem = mBottomNav.getMenu().getItem(0);
         selectFragment(selectedItem);
+    }
+
+    private void startNotification() {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 1);
+        calendar.set(Calendar.MINUTE, 26);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.AM_PM,Calendar.PM);
+
+        Intent myIntent = new Intent(MainActivity.this, NotificationReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 100, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 
     private void selectFragment(MenuItem item) {
