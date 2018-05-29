@@ -12,13 +12,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import java.util.List;
+
+import pro200.smile.model.Smile;
+import pro200.smile.model.SmileList;
+import pro200.smile.service.LiveSmileService;
+
 
 public class HomeFragment extends Fragment {
     private ImageButton imageButton;
     private GestureDetector gs;
     private final int NUMBER_OF_PICTURES = 5;
 
-    private int[] images = new int[]{R.drawable.happybeach, R.drawable.badboyz, R.drawable.smile1, R.drawable.smile2, R.drawable.smile3};
+    private List<Smile> images;
     private int currentImageIndex = 0;
 
     public static Fragment newInstance() {
@@ -40,16 +46,16 @@ public class HomeFragment extends Fragment {
                 if(gs.onTouchEvent(event)){
                     if(event.getX() >= halfWidth){
                         currentImageIndex++;
-                        if(currentImageIndex == NUMBER_OF_PICTURES ){
+                        if(currentImageIndex == images.size() ){
                             currentImageIndex = 0;
                         }
-                        imageButton.setImageResource(images[currentImageIndex]);
+                        imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
                     }else {
                         currentImageIndex--;
                         if(currentImageIndex == -1){
-                            currentImageIndex = NUMBER_OF_PICTURES - 1;
+                            currentImageIndex = images.size() - 1;
                         }
-                        imageButton.setImageResource(images[currentImageIndex]);
+                        imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
                     }
 
                 }
@@ -67,9 +73,18 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         gs = new GestureDetector(getActivity(), new ClickConfirmed());
+        populateImageButton();
         imageButton = (ImageButton)v.findViewById(R.id.imageButton1);
         addListenerOnButton();
         return v;
+    }
+
+    private void populateImageButton() {
+        LiveSmileService ls =  new LiveSmileService(this.getContext());
+        ls.LoginOrCreate("YEET");
+        SmileList retrievedList = ls.GetUserSmiles("YEET");
+        images = retrievedList.getSmiles();
+
     }
 
     @Override

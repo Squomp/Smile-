@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -132,6 +133,7 @@ public class SmileFragment extends Fragment {
             Bitmap imageBitmap = null;
             try {
                 imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
+                imageBitmap = changeImageOrientation(imageBitmap);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d("BITMAPS", "Could not retrieve most Recent Image");
@@ -147,6 +149,13 @@ public class SmileFragment extends Fragment {
             mImageView.setImageBitmap(newSmile.getImage());
 
         }
+    }
+
+    private Bitmap changeImageOrientation(Bitmap imageBitmap) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        return Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(),
+                matrix, true);
     }
 
     public static Fragment newInstance() {
