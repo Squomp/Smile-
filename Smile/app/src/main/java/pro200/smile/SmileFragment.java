@@ -1,6 +1,8 @@
 package pro200.smile;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.net.Uri;
@@ -9,7 +11,9 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,17 +35,60 @@ import static android.app.Activity.RESULT_OK;
 
 public class SmileFragment extends Fragment {
 
-    private View mContent;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    private View mContent;
     private File recentImageFile;
     private ImageView mImageView;
 
-    public File getRecentImageFile() {
-        return recentImageFile;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_smile, container, false);
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            dispatchTakePictureIntent();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+
+        mImageView = (ImageView) v.findViewById(R.id.mImageView);
+        // Inflate the layout for this fragment
+        return v;
     }
 
-    public void setRecentImageFile(File recentImageFile) {
-        this.recentImageFile = recentImageFile;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (savedInstanceState == null) {
+            Bundle args = getArguments();
+
+            // initialize views
+            mContent = view.findViewById(R.id.smile_content);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted
+                    Log.d("Tag?", "Permission granted");
+                    dispatchTakePictureIntent();
+                } else {
+                    // Permission denied
+                    Log.d("Tag?", "Permission denied");
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
     }
 
     private void dispatchTakePictureIntent() {
@@ -52,18 +99,17 @@ public class SmileFragment extends Fragment {
         }
     }
 
-
-    private Uri getOutputMediaFileUri(){
+    private Uri getOutputMediaFileUri() {
         return Uri.fromFile(getOutputMediaFile());
     }
 
-    private File getOutputMediaFile(){
+    private File getOutputMediaFile() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "MyCameraApp");
-        if (! mediaStorageDir.exists()){
-            if (!mediaStorageDir.mkdirs()){
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
                 Log.d("MyCameraApp", "failed to create directory");
                 return null;
             }
@@ -71,7 +117,7 @@ public class SmileFragment extends Fragment {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_"+ timeStamp + ".jpg");
+                "IMG_" + timeStamp + ".jpg");
         setRecentImageFile(mediaFile);
 
 
@@ -86,7 +132,6 @@ public class SmileFragment extends Fragment {
             Uri imageAsURI = android.net.Uri.parse(getRecentImageFile().toURI().toString());
             Bitmap imageBitmap = null;
             try {
-
                 imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
                 imageBitmap = changeImageOrientation(imageBitmap);
             } catch (IOException e) {
@@ -95,7 +140,7 @@ public class SmileFragment extends Fragment {
             }
 
 //            mImageView.setImageBitmap(imageBitmap);
-            LiveSmileService ls =  new LiveSmileService(this.getContext());
+            LiveSmileService ls = new LiveSmileService(this.getContext());
             ls.LoginOrCreate("YEET");
             ls.AddSmile("YEET", imageBitmap);
             SmileList retrievedList = ls.GetUserSmiles("YEET");
@@ -113,34 +158,16 @@ public class SmileFragment extends Fragment {
                 matrix, true);
     }
 
-
     public static Fragment newInstance() {
         Fragment frag = new SmileFragment();
         return frag;
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_smile, container, false);
-        dispatchTakePictureIntent();
-        mImageView = (ImageView)v.findViewById(R.id.mImageView);
-        // Inflate the layout for this fragment
-        return v;
-
-
+    public File getRecentImageFile() {
+        return recentImageFile;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if (savedInstanceState == null) {
-            Bundle args = getArguments();
-
-            // initialize views
-            mContent = view.findViewById(R.id.smile_content);
-        }
+    public void setRecentImageFile(File recentImageFile) {
+        this.recentImageFile = recentImageFile;
     }
 }

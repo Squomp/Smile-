@@ -13,6 +13,8 @@ import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseConfiguration;
 import com.couchbase.lite.Document;
 import com.couchbase.lite.Expression;
+import com.couchbase.lite.Meta;
+import com.couchbase.lite.MetaExpression;
 import com.couchbase.lite.MutableArray;
 import com.couchbase.lite.MutableDocument;
 import com.couchbase.lite.Query;
@@ -72,7 +74,7 @@ public class LiveSmileService implements SmileService {
     @Override
     public SmileList GetRandomSmiles(int count) {
         if (recents.getSmiles().isEmpty()) {
-            Query q = QueryBuilder.select(SelectResult.all())
+            Query q = QueryBuilder.select(SelectResult.expression(Meta.id))
                     .from(DataSource.database(database))
                     .where(Expression.property("type").equalTo(Expression.string("smile"))
                             .and(Expression.property("sharing").equalTo(Expression.string("public"))));
@@ -83,9 +85,12 @@ public class LiveSmileService implements SmileService {
                 e.printStackTrace();
             }
             for (Result i : results.allResults()) {
-                if (i.getDate("postedDate").after(new Date(System.currentTimeMillis() - (60 * 60 * 24)))){
-                    byte[] bytes = i.getBlob("data").getContent();
-                    recents.addSmile(new Smile(i.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                MutableDocument doc = database.getDocument(i.getString("id")).toMutable();
+                Date d = doc.getDate("postedDate");
+                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 24 * 1000));
+                if (d.after(yesterday)){
+                    byte[] bytes = doc.getBlob("data").getContent();
+                    recents.addSmile(new Smile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
                 }
             }
         }
