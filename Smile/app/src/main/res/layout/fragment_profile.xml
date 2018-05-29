@@ -9,8 +9,22 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:contentDescription="@string/title_profile"
         android:src="@android:drawable/btn_star_big_off" />
+
+    <ScrollView
+        android:id="@+id/smileScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="145dp">
+
+        <LinearLayout
+            android:id="@+id/userSmiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
 </FrameLayout>

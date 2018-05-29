@@ -117,7 +117,7 @@ public class LiveSmileService implements SmileService {
     @Override
     public void AddSmile(String id, Bitmap smile) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        smile.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+        smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
         byte[] bitmapdata = bos.toByteArray();
         ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
         Blob b = new Blob("image/jpg", bs);
@@ -125,7 +125,7 @@ public class LiveSmileService implements SmileService {
         MutableDocument smileDoc = new MutableDocument()
                 .setString("type", "smile")
                 .setBlob("data", b)
-                .setValue("postedDate", new Date())
+                .setDate("postedDate", new Date())
                 .setString("sharing", database.getDocument(id).toMutable().getString("sharing"));
 
         try {
