@@ -43,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
         mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
         mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        startNotification();
+        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 100,
+                new Intent(MainActivity.this, NotificationReceiver.class),
+                PendingIntent.FLAG_NO_CREATE) != null);
+        if(!alarmUp) {
+            startNotification();
+        }
         MenuItem selectedItem = mBottomNav.getMenu().getItem(0);
         selectFragment(selectedItem);
     }
@@ -51,15 +56,15 @@ public class MainActivity extends AppCompatActivity {
     private void startNotification() {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 1);
-        calendar.set(Calendar.MINUTE, 26);
+        calendar.set(Calendar.HOUR_OF_DAY, 3);
+        calendar.set(Calendar.MINUTE, 2);
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM,Calendar.PM);
+        calendar.set(Calendar.AM_PM, Calendar.PM);
 
         Intent myIntent = new Intent(MainActivity.this, NotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 100, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
     }
 
