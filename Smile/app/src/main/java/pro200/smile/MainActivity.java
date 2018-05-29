@@ -11,6 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+
 import java.util.Calendar;
 
 import pro200.smile.service.NotificationReceiver;
@@ -23,6 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private PendingIntent pendingIntent;
     private BottomNavigationView mBottomNav;
     private int mSelectedItemInt;
+
+    private AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+        @Override
+        protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
+                AccessToken currentAccessToken) {
+            if (currentAccessToken == null) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+        }
+    };
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
