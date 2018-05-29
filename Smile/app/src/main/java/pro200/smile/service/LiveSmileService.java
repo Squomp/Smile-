@@ -96,9 +96,18 @@ public class LiveSmileService implements SmileService {
         }
         SmileList toReturn = new SmileList();
         Random r = new Random();
-        for (int i = 0; i < count; i++){
-            int index = r.nextInt(recents.getSmiles().size() - 1);
-            toReturn.addSmile(recents.getSmiles().get(index));
+        int start = r.nextInt(recents.getSmiles().size() - 1);
+        int i = 0;
+        if (!recents.getSmiles().isEmpty()) {
+            while (toReturn.getSmiles().size() < count) {
+                if (start + count < recents.getSmiles().size()) {
+                    toReturn.addSmile(recents.getSmiles().get(start + i));
+                    i++;
+                } else {
+                    start = 0;
+                    i = 0;
+                }
+            }
         }
         return toReturn;
     }
@@ -146,6 +155,7 @@ public class LiveSmileService implements SmileService {
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
+        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
     }
 
     @Override
