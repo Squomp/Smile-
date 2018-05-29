@@ -96,9 +96,10 @@ public class LiveSmileService implements SmileService {
         }
         SmileList toReturn = new SmileList();
         Random r = new Random();
-        int start = r.nextInt(recents.getSmiles().size() - 1);
-        int i = 0;
+
         if (!recents.getSmiles().isEmpty()) {
+            int start = r.nextInt(recents.getSmiles().size() - 1);
+            int i = 0;
             while (toReturn.getSmiles().size() < count) {
                 if (start + count < recents.getSmiles().size()) {
                     toReturn.addSmile(recents.getSmiles().get(start + i));
