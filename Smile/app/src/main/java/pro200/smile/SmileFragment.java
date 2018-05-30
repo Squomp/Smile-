@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -38,6 +39,7 @@ public class SmileFragment extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private View mContent;
+    private Button takeSmileButton;
     private File recentImageFile;
     private ImageView mImageView;
 
@@ -45,9 +47,7 @@ public class SmileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_smile, container, false);
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            dispatchTakePictureIntent();
-        } else {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
@@ -60,12 +60,18 @@ public class SmileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (savedInstanceState == null) {
             Bundle args = getArguments();
 
             // initialize views
             mContent = view.findViewById(R.id.smile_content);
+            takeSmileButton = view.findViewById(R.id.takeSmileButton);
+
+            takeSmileButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dispatchTakePictureIntent();
+                }
+            });
         }
     }
 
@@ -78,7 +84,6 @@ public class SmileFragment extends Fragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted
                     Log.d("Tag?", "Permission granted");
-                    dispatchTakePictureIntent();
                 } else {
                     // Permission denied
                     Log.d("Tag?", "Permission denied");

@@ -77,12 +77,6 @@ public class ProfileFragment extends Fragment {
             layout.addView(img);
         }
     }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putParcelable("ProfileBitmap", ((BitmapDrawable)profileImageView.getDrawable()).getBitmap());
-    }
 }
 
 
