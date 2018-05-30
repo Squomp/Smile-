@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.VideoView;
@@ -41,6 +42,7 @@ public class SmileFragment extends Fragment {
     static final int REQUEST_VIDEO_CAPTURE = 1;
     static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private View mContent;
+    private Button takeSmileButton;
     private File recentImageFile;
     private ImageView mImageView;
     private VideoView mVideoView;
@@ -65,12 +67,18 @@ public class SmileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (savedInstanceState == null) {
             Bundle args = getArguments();
 
             // initialize views
             mContent = view.findViewById(R.id.smile_content);
+            takeSmileButton = view.findViewById(R.id.takeSmileButton);
+
+            takeSmileButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dispatchTakePictureIntent();
+                }
+            });
         }
     }
 
@@ -83,7 +91,6 @@ public class SmileFragment extends Fragment {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted
                     Log.d("Tag?", "Permission granted");
-                    dispatchTakePictureIntent();
                 } else {
                     // Permission denied
                     Log.d("Tag?", "Permission denied");

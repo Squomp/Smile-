@@ -25,13 +25,19 @@ import com.couchbase.lite.SelectResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import pro200.smile.model.PhotoSmile;
 import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
+import pro200.smile.model.VideoSmile;
 
 public class LiveSmileService implements SmileService {
 
@@ -64,8 +70,22 @@ public class LiveSmileService implements SmileService {
         for (Object o: arr) {
             String s = (String)o;
             MutableDocument smileDoc = database.getDocument(s).toMutable();
-            byte[] bytes = smileDoc.getBlob("data").getContent();
-            sl.addSmile(new Smile(smileDoc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+            Blob b = smileDoc.getBlob("data");
+            if (b.getContentType().equals("image")) {
+                byte[] bytes = b.getContent();
+                sl.addSmile(new PhotoSmile(smileDoc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+            }
+            else if (b.getContentType().equals("video")){
+                byte[] bytes = b.getContent();
+                String uriString = null;
+                try {
+                    uriString = new String(bytes, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                URI uri = URI.create(uriString);
+                sl.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), uri)));
+            }
         }
 
         return sl;
@@ -89,8 +109,24 @@ public class LiveSmileService implements SmileService {
                 Date d = doc.getDate("postedDate");
                 Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 24 * 1000));
                 if (d.after(yesterday)){
-                    byte[] bytes = doc.getBlob("data").getContent();
-                    recents.addSmile(new Smile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+//                    byte[] bytes = doc.getBlob("data").getContent();
+//                    recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                    Blob b = doc.getBlob("data");
+                    if (b.getContentType().equals("image")) {
+                        byte[] bytes = b.getContent();
+                        recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                    }
+                    else if (b.getContentType().equals("video")){
+                        byte[] bytes = b.getContent();
+                        String uriString = null;
+                        try {
+                            uriString = new String(bytes, "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        URI uri = URI.create(uriString);
+                        recents.addSmile((new VideoSmile(doc.getDate("postedDate"), uri)));
+                    }
                 }
             }
         }
@@ -132,13 +168,22 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
-        byte[] bitmapdata = bos.toByteArray();
-        ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
-        Blob b = new Blob("image/jpg", bs);
-
+    public void AddSmile(String id, Bitmap smile, URI videoFile) {
+        Blob b = null;
+        if (videoFile == null) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
+            byte[] bitmapdata = bos.toByteArray();
+            ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+            b = new Blob("image", bs);
+        }
+        else if (smile == null){
+            try {
+                b = new Blob("video", videoFile.toURL());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         MutableDocument smileDoc = new MutableDocument()
                 .setString("type", "smile")
                 .setBlob("data", b)
@@ -158,7 +203,13 @@ public class LiveSmileService implements SmileService {
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
-        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
+//        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
+        if (b.getContentType().equals("image")) {
+            recents.addSmile(new PhotoSmile(smileDoc.getDate("postedDate"), smile));
+        }
+        else if (b.getContentType().equals("video")){
+            recents.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), videoFile)));
+        }
     }
 
     @Override
