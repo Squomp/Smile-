@@ -43,6 +43,7 @@ public class SmileFragment extends Fragment {
     static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private View mContent;
     private Button takeSmileButton;
+    private Button takeVideoButton;
     private File recentImageFile;
     private ImageView mImageView;
     private VideoView mVideoView;
@@ -73,10 +74,16 @@ public class SmileFragment extends Fragment {
             // initialize views
             mContent = view.findViewById(R.id.smile_content);
             takeSmileButton = view.findViewById(R.id.takeSmileButton);
+            takeVideoButton = view.findViewById(R.id.takeVideoButton);
 
             takeSmileButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     dispatchTakePictureIntent();
+                }
+            });
+            takeVideoButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    dispatchTakeVideoIntent();
                 }
             });
         }
