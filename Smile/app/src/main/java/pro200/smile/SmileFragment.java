@@ -53,7 +53,7 @@ public class SmileFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_smile, container, false);
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 //            dispatchTakePictureIntent();
-            dispatchTakeVideoIntent();
+//            dispatchTakeVideoIntent();
         } else {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);

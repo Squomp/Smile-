@@ -24,7 +24,7 @@
         <VideoView
             android:id="@+id/mVideoView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="242dp"
             android:contentDescription="@string/title_smile"
             android:src="@android:drawable/ic_delete" />
 
