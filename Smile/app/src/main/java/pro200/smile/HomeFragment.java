@@ -42,25 +42,27 @@ public class HomeFragment extends Fragment {
         imageButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if(images.size() != 0) {
 
-                if(gs.onTouchEvent(event)){
-                    if(event.getX() >= halfWidth){
-                        currentImageIndex++;
-                        if(currentImageIndex == images.size() ){
-                            currentImageIndex = 0;
+
+                    if (gs.onTouchEvent(event)) {
+                        if (event.getX() >= halfWidth) {
+                            currentImageIndex++;
+                            if (currentImageIndex == images.size()) {
+                                currentImageIndex = 0;
+                            }
+                            imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
+                        } else {
+                            currentImageIndex--;
+                            if (currentImageIndex == -1) {
+                                currentImageIndex = images.size() - 1;
+                            }
+                            imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
                         }
-                        imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
-                    }else {
-                        currentImageIndex--;
-                        if(currentImageIndex == -1){
-                            currentImageIndex = images.size() - 1;
-                        }
-                        imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
+
                     }
 
                 }
-
-
                 return true;
             }
         });
@@ -82,7 +84,7 @@ public class HomeFragment extends Fragment {
     private void populateImageButton() {
         LiveSmileService ls =  new LiveSmileService(this.getContext());
         ls.LoginOrCreate("YEET");
-        SmileList retrievedList = ls.GetRandomSmiles(3);
+        SmileList retrievedList = ls.GetRandomSmiles(7);
         images = retrievedList.getSmiles();
 
     }

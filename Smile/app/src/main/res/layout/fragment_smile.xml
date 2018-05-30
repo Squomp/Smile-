@@ -9,12 +9,19 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageView
-        android:id="@+id/mImageView"
+    <!--<ImageView-->
+        <!--android:id="@+id/mImageView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:contentDescription="@string/title_smile"-->
+        <!--android:src="@android:drawable/ic_delete" />-->
+
+    <VideoView
+        android:id="@+id/mVideoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/title_smile"
-        android:src="@android:drawable/ic_delete" />
+        />
+
 
 
 </FrameLayout>

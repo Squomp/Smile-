@@ -20,9 +20,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.VideoView;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -36,24 +38,27 @@ import static android.app.Activity.RESULT_OK;
 public class SmileFragment extends Fragment {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 1;
     static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
     private View mContent;
     private File recentImageFile;
     private ImageView mImageView;
+    private VideoView mVideoView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_smile, container, false);
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            dispatchTakePictureIntent();
+//            dispatchTakePictureIntent();
+            dispatchTakeVideoIntent();
         } else {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
+        mVideoView = (VideoView) v.findViewById(R.id.mVideoView);
+//        mImageView = (ImageView) v.findViewById(R.id.mImageView);
 
-        mImageView = (ImageView) v.findViewById(R.id.mImageView);
-        // Inflate the layout for this fragment
         return v;
     }
 
@@ -88,6 +93,14 @@ public class SmileFragment extends Fragment {
 
             // other 'case' lines to check for other
             // permissions this app might request.
+        }
+    }
+
+
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(this.getContext().getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
     }
 
@@ -127,28 +140,30 @@ public class SmileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
-            Uri imageAsURI = android.net.Uri.parse(getRecentImageFile().toURI().toString());
-            Bitmap imageBitmap = null;
-            try {
-                imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
-                imageBitmap = changeImageOrientation(imageBitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d("BITMAPS", "Could not retrieve most Recent Image");
-            }
-
-//            mImageView.setImageBitmap(imageBitmap);
-            LiveSmileService ls = new LiveSmileService(this.getContext());
-            ls.LoginOrCreate("YEET");
-            ls.AddSmile("YEET", imageBitmap);
-            SmileList retrievedList = ls.GetUserSmiles("YEET");
-
-            Smile newSmile = retrievedList.getSmiles().get(0);
-            mImageView.setImageBitmap(newSmile.getImage());
-
-        }
+        mVideoView.setVideoURI(data.getData());
+        mVideoView.start();
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//
+//            Uri imageAsURI = android.net.Uri.parse(getRecentImageFile().toURI().toString());
+//            Bitmap imageBitmap = null;
+//            try {
+//                imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
+//                imageBitmap = changeImageOrientation(imageBitmap);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                Log.d("BITMAPS", "Could not retrieve most Recent Image");
+//            }
+//
+////            mImageView.setImageBitmap(imageBitmap);
+//            LiveSmileService ls = new LiveSmileService(this.getContext());
+//            ls.LoginOrCreate("YEET");
+//            ls.AddSmile("YEET", imageBitmap);
+//            SmileList retrievedList = ls.GetUserSmiles("YEET");
+//
+//            Smile newSmile = retrievedList.getSmiles().get(0);
+//            mImageView.setImageBitmap(newSmile.getImage());
+//
+//        }
     }
 
     private Bitmap changeImageOrientation(Bitmap imageBitmap) {
