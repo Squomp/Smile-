@@ -8,6 +8,7 @@ import java.net.URI;
 import java.util.Date;
 
 import pro200.smile.R;
+import pro200.smile.model.PhotoSmile;
 import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
 
@@ -22,18 +23,18 @@ public class StaticSmileService implements SmileService {
     @Override
     public SmileList GetUserSmiles(String id) {
         SmileList smileList = new SmileList();
-        smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
-        smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
-        smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_smile_black_24dp)));
+        smileList.addSmile(new PhotoSmile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
+        smileList.addSmile(new PhotoSmile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
+        smileList.addSmile(new PhotoSmile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_smile_black_24dp)));
         return smileList;
     }
 
     @Override
     public SmileList GetRandomSmiles(int count) {
         SmileList smileList = new SmileList();
-        smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
-        smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
-        smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_smile_black_24dp)));
+        smileList.addSmile(new PhotoSmile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
+        smileList.addSmile(new PhotoSmile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
+        smileList.addSmile(new PhotoSmile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_smile_black_24dp)));
         return smileList;
     }
 
