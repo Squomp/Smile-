@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.net.URI;
 import java.util.Date;
 
 import pro200.smile.R;
@@ -42,7 +43,7 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile) {
+    public void AddSmile(String id, Bitmap smile, URI videoFile) {
         /* do nothing */
     }
 
