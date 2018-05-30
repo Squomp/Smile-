@@ -71,11 +71,11 @@ public class ProfileFragment extends Fragment {
 
         smiles = service.GetUserSmiles("boi");
         LinearLayout layout = view.findViewById(R.id.userSmiles);
-        for (Smile s : smiles.getSmiles()) {
-            ImageView img = new ImageView(this.getContext());
-            img.setImageBitmap(s.getImage());
-            layout.addView(img);
-        }
+//        for (Smile s : smiles.getSmiles()) {
+//            ImageView img = new ImageView(this.getContext());
+//            img.setImageBitmap(s.getImage());
+//            layout.addView(img);
+//        }
     }
 }
 

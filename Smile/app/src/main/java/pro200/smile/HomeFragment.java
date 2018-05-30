@@ -39,33 +39,33 @@ public class HomeFragment extends Fragment {
         this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         final int halfWidth = displayMetrics.widthPixels/2;
 
-        imageButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(images.size() != 0) {
-
-
-                    if (gs.onTouchEvent(event)) {
-                        if (event.getX() >= halfWidth) {
-                            currentImageIndex++;
-                            if (currentImageIndex == images.size()) {
-                                currentImageIndex = 0;
-                            }
-                            imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
-                        } else {
-                            currentImageIndex--;
-                            if (currentImageIndex == -1) {
-                                currentImageIndex = images.size() - 1;
-                            }
-                            imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
-                        }
-
-                    }
-
-                }
-                return true;
-            }
-        });
+//        imageButton.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(images.size() != 0) {
+//
+//
+//                    if (gs.onTouchEvent(event)) {
+//                        if (event.getX() >= halfWidth) {
+//                            currentImageIndex++;
+//                            if (currentImageIndex == images.size()) {
+//                                currentImageIndex = 0;
+//                            }
+//                            imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
+//                        } else {
+//                            currentImageIndex--;
+//                            if (currentImageIndex == -1) {
+//                                currentImageIndex = images.size() - 1;
+//                            }
+//                            imageButton.setImageBitmap(images.get(currentImageIndex).getImage());
+//                        }
+//
+//                    }
+//
+//                }
+//                return true;
+//            }
+//        });
     }
 
 
