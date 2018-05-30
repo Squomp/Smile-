@@ -71,10 +71,9 @@ public class MainActivity extends AppCompatActivity {
     private void startNotification() {
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 3);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.AM_PM, Calendar.PM);
 
         Intent myIntent = new Intent(MainActivity.this, NotificationReceiver.class);
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 100, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
