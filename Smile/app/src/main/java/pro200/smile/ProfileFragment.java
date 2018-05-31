@@ -71,11 +71,11 @@ public class ProfileFragment extends Fragment {
             profileTextView.setText(profile.getName());
         }
         else {
-            profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
+            //profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
         }
 
-        smiles = service.GetUserSmiles(profile.getId());
         LinearLayout layout = view.findViewById(R.id.userSmiles);
+        smiles = service.GetUserSmiles(profile.getId());
 //        for (Smile s : smiles.getSmiles()) {
 //            ImageView img = new ImageView(this.getContext());
 //            img.setImageBitmap(s.getImage());
