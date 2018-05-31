@@ -29,7 +29,7 @@
             android:background="@color/black"
             android:contentDescription="@string/title_profile"
             android:padding="1dp"
-            android:src="@color/lightGrey" />
+            android:src="@drawable/com_facebook_profile_picture_blank_square" />
 
         <TextView
             android:id="@+id/profileNameTextView"

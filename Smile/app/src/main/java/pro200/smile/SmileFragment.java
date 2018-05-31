@@ -59,8 +59,7 @@ public class SmileFragment extends Fragment {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
-        mVideoView = (VideoView) v.findViewById(R.id.mVideoView);
-        mImageView = (ImageView) v.findViewById(R.id.mImageView);
+
 
         return v;
     }
@@ -75,6 +74,8 @@ public class SmileFragment extends Fragment {
             mContent = view.findViewById(R.id.smile_content);
             takeSmileButton = view.findViewById(R.id.takeSmileButton);
             takeVideoButton = view.findViewById(R.id.takeVideoButton);
+            mVideoView = view.findViewById(R.id.mVideoView);
+            mImageView = view.findViewById(R.id.mImageView);
 
             takeSmileButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -169,7 +170,8 @@ public class SmileFragment extends Fragment {
                     Log.d("BITMAPS", "Could not retrieve most Recent Image");
                 }
                 Log.e("STATE", getRecentImageFile().toString());
-                mImageView.bringToFront();
+                mVideoView.setVisibility(View.GONE);
+                mImageView.setVisibility(View.VISIBLE);
                 mImageView.setImageBitmap(imageBitmap);
                 LiveSmileService ls = new LiveSmileService(this.getContext());
                 ls.LoginOrCreate("YEET");
@@ -183,7 +185,8 @@ public class SmileFragment extends Fragment {
 
         }else {
             //VIDEO WAS TAKEN
-            mVideoView.bringToFront();
+            mImageView.setVisibility(View.GONE);
+            mVideoView.setVisibility(View.VISIBLE);
             mVideoView.setVideoURI(data.getData());
             mVideoView.start();
 
