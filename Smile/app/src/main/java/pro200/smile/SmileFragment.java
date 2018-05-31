@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +30,7 @@ import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import pro200.smile.model.PhotoSmile;
 import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
 import pro200.smile.service.LiveSmileService;
@@ -145,6 +147,7 @@ public class SmileFragment extends Fragment {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                 "IMG_" + timeStamp + ".jpg");
+
         setRecentImageFile(mediaFile);
 
 
@@ -154,7 +157,7 @@ public class SmileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(data == null){
+        if (data == null) {
             //IMAGE WAS TAKEN
 
             if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -163,25 +166,41 @@ public class SmileFragment extends Fragment {
                 Bitmap imageBitmap = null;
                 try {
                     imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
-                    imageBitmap = changeImageOrientation(imageBitmap);
+                    imageBitmap = changeImageOrientation(imageBitmap, 90);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.d("BITMAPS", "Could not retrieve most Recent Image");
                 }
                 Log.e("STATE", getRecentImageFile().toString());
                 mImageView.bringToFront();
+//                ExifInterface exif = new ExifInterface(filename);
+                try {
+                    ExifInterface exif = new ExifInterface(getRecentImageFile().getPath());
+                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
+                    if(orientation == 4){
+                        changeImageOrientation(imageBitmap, 180);
+                    }
+                } catch (IOException e) {
+                    Log.d("STATE", "EXIF");
+                    e.printStackTrace();
+                }
+
                 mImageView.setImageBitmap(imageBitmap);
                 LiveSmileService ls = new LiveSmileService(this.getContext());
                 ls.LoginOrCreate("YEET");
                 ls.AddSmile("YEET", imageBitmap, null);
 //                SmileList retrievedList = ls.GetUserSmiles("YEET");
-//
-//                Smile newSmile = retrievedList.getSmiles().get(0);
-//                mImageView.setImageBitmap(newSmile.getImage());
+//                if (retrievedList.getSmiles().size() > 0) {
+//                    Smile newSmile = retrievedList.getSmiles().get(retrievedList.getSmiles().size() - 1);
+//                    if (newSmile instanceof PhotoSmile) {
+//                        mImageView.setImageBitmap(((PhotoSmile) newSmile).getImage());
+//                    }
+//                }
+
 
             }
 
-        }else {
+        } else {
             //VIDEO WAS TAKEN
             mVideoView.bringToFront();
             mVideoView.setVideoURI(data.getData());
@@ -195,9 +214,9 @@ public class SmileFragment extends Fragment {
 
     }
 
-    private Bitmap changeImageOrientation(Bitmap imageBitmap) {
+    private Bitmap changeImageOrientation(Bitmap imageBitmap, int degrees) {
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
+        matrix.postRotate(degrees);
         return Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(),
                 matrix, true);
     }
