@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.facebook.Profile;
 
@@ -35,6 +36,7 @@ public class ProfileFragment extends Fragment {
 
     private View mContent;
     private ImageView profileImageView;
+    private TextView profileTextView;
     private LiveSmileService service;
     private SmileList smiles;
 
@@ -57,13 +59,16 @@ public class ProfileFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Initialize Views
         mContent = view.findViewById(R.id.profile_content);
         profileImageView = view.findViewById(R.id.imageView);
+        profileTextView = view.findViewById(R.id.profileNameTextView);
         if (savedInstanceState == null) {
             Bundle args = getArguments();
 
             Profile profile = Profile.getCurrentProfile();
             new LoadProfileImage(profileImageView).execute(profile.getProfilePictureUri(300, 300).toString());
+            profileTextView.setText(profile.getName());
         }
         else {
             profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
