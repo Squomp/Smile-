@@ -171,7 +171,7 @@ public class SmileFragment extends Fragment {
                 Bitmap imageBitmap = null;
                 try {
                     imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
-                    imageBitmap = changeImageOrientation(imageBitmap, 90);
+//                    imageBitmap = changeImageOrientation(imageBitmap, 90);
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.d("BITMAPS", "Could not retrieve most Recent Image");
@@ -183,9 +183,25 @@ public class SmileFragment extends Fragment {
                 try {
                     ExifInterface exif = new ExifInterface(getRecentImageFile().getPath());
                     int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-                    if(orientation == 4){
-                        changeImageOrientation(imageBitmap, 180);
+                    switch (orientation) {
+                        case 1:
+                            break;
+                        case 3:
+                        case 4:
+                            imageBitmap = changeImageOrientation(imageBitmap,180);
+                            break;
+                        case 5:
+                        case 6:
+                            imageBitmap = changeImageOrientation(imageBitmap,90);
+                            break;
+                        case 7:
+                        case 8:
+                            imageBitmap = changeImageOrientation(imageBitmap,270);
+                            break;
+                        default:
+                            break;
                     }
+//                  
                 } catch (IOException e) {
                     Log.d("STATE", "EXIF");
                     e.printStackTrace();
