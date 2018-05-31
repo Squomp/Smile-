@@ -23,6 +23,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.facebook.Profile;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -47,6 +49,7 @@ public class SmileFragment extends Fragment {
     private File recentImageFile;
     private ImageView mImageView;
     private VideoView mVideoView;
+    private Profile profile = Profile.getCurrentProfile();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +74,7 @@ public class SmileFragment extends Fragment {
             Bundle args = getArguments();
 
             // initialize views
+            profile = Profile.getCurrentProfile();
             mContent = view.findViewById(R.id.smile_content);
             takeSmileButton = view.findViewById(R.id.takeSmileButton);
             takeVideoButton = view.findViewById(R.id.takeVideoButton);
@@ -174,9 +178,8 @@ public class SmileFragment extends Fragment {
                 mImageView.setVisibility(View.VISIBLE);
                 mImageView.setImageBitmap(imageBitmap);
                 LiveSmileService ls = new LiveSmileService(this.getContext());
-                ls.LoginOrCreate("YEET");
-                ls.AddSmile("YEET", imageBitmap, null);
-//                SmileList retrievedList = ls.GetUserSmiles("YEET");
+                ls.AddSmile(profile.getId(), imageBitmap, null);
+//                SmileList retrievedList = ls.GetUserSmiles(profile.getId());
 //
 //                Smile newSmile = retrievedList.getSmiles().get(0);
 //                mImageView.setImageBitmap(newSmile.getImage());
@@ -191,8 +194,7 @@ public class SmileFragment extends Fragment {
             mVideoView.start();
 
             LiveSmileService ls = new LiveSmileService(this.getContext());
-            ls.LoginOrCreate("YEET");
-//            ls.AddSmile("YEET", null, data.getData());
+//            ls.AddSmile(profile.getId(), null, data.getData());
         }
 
 

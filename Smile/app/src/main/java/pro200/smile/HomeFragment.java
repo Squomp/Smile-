@@ -86,7 +86,6 @@ public class HomeFragment extends Fragment {
 
     private void populateImageButton() {
         LiveSmileService ls =  new LiveSmileService(this.getContext());
-        ls.LoginOrCreate("YEET");
         SmileList retrievedList = ls.GetRandomSmiles(7);
         images = retrievedList.getSmiles();
 
