@@ -3,6 +3,7 @@ package pro200.smile.service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -28,7 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,8 +85,8 @@ public class LiveSmileService implements SmileService {
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-                URI uri = URI.create(uriString);
-                sl.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), android.net.Uri.parse(uri.toString()))));
+                Uri uri = Uri.parse(uriString);
+                sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uri));
             }
         }
 
@@ -125,8 +126,8 @@ public class LiveSmileService implements SmileService {
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
-                        URI uri = URI.create(uriString);
-                        recents.addSmile((new VideoSmile(doc.getDate("postedDate"), android.net.Uri.parse(uri.toString()))));
+                        Uri uri = Uri.parse(uriString);
+                        recents.addSmile(new VideoSmile(doc.getDate("postedDate"), uri));
                     }
                 }
             }
@@ -181,7 +182,8 @@ public class LiveSmileService implements SmileService {
         else if (smile == null){
             Log.w("BLOB", "WE IN THIS");
             try {
-                b = new Blob("video", new URL(videoFile.toString()));
+                URL url = new URL(videoFile.toString().replace("content:/", "file://"));
+                b = new Blob("video", url);
             } catch (IOException e) {
                 Log.w("BLOB", "CAUGHT UP");
                 e.printStackTrace();
