@@ -4,18 +4,18 @@ import java.net.URI;
 import java.util.Date;
 
 public class VideoSmile extends Smile {
-    private URI filePath;
+    private android.net.Uri filePath;
 
-    public VideoSmile(Date timestamp, URI filePath) {
+    public VideoSmile(Date timestamp, android.net.Uri filePath) {
         this.timestamp = timestamp;
         this.filePath = filePath;
     }
 
-    public URI getImage() {
+    public android.net.Uri getImage() {
         return filePath;
     }
 
-    public void setImage(URI filePath) {
+    public void setImage(android.net.Uri filePath) {
         this.filePath = filePath;
     }
 }

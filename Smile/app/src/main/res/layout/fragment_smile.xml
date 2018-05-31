@@ -10,34 +10,51 @@
     <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!--<ImageView-->
-            <!--android:id="@+id/mImageView"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="515dp"-->
-            <!--android:contentDescription="@string/title_smile"-->
-            <!--android:src="@android:drawable/ic_delete" />-->
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="384dp">
 
-        <VideoView
-            android:id="@+id/mVideoView"
-            android:layout_width="match_parent"
-            android:layout_height="242dp"
-            android:contentDescription="@string/title_smile"
-            android:src="@android:drawable/ic_delete" />
+            <VideoView
+                android:id="@+id/mVideoView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/title_smile" />
 
-        <Button
-            android:id="@+id/takeSmileButton"
+            <ImageView
+                android:id="@+id/mImageView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/title_smile" />
+
+        </FrameLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/take_smile_button" />
-        <Button
-            android:id="@+id/takeVideoButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/take_video_button" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/takeVideoButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/take_video_button" />
+
+            <Button
+                android:id="@+id/takeSmileButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/take_smile_button" />
+        </LinearLayout>
+
     </LinearLayout>
 
 

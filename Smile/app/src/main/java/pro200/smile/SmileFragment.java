@@ -60,7 +60,7 @@ public class SmileFragment extends Fragment {
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
         mVideoView = (VideoView) v.findViewById(R.id.mVideoView);
-//        mImageView = (ImageView) v.findViewById(R.id.mImageView);
+        mImageView = (ImageView) v.findViewById(R.id.mImageView);
 
         return v;
     }
@@ -154,30 +154,45 @@ public class SmileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mVideoView.setVideoURI(data.getData());
-        mVideoView.start();
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+        if(data == null){
+            //IMAGE WAS TAKEN
+
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+
+                Uri imageAsURI = android.net.Uri.parse(getRecentImageFile().toURI().toString());
+                Bitmap imageBitmap = null;
+                try {
+                    imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
+                    imageBitmap = changeImageOrientation(imageBitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.d("BITMAPS", "Could not retrieve most Recent Image");
+                }
+                Log.e("STATE", getRecentImageFile().toString());
+                mImageView.bringToFront();
+                mImageView.setImageBitmap(imageBitmap);
+                LiveSmileService ls = new LiveSmileService(this.getContext());
+                ls.LoginOrCreate("YEET");
+                ls.AddSmile("YEET", imageBitmap, null);
+//                SmileList retrievedList = ls.GetUserSmiles("YEET");
 //
-//            Uri imageAsURI = android.net.Uri.parse(getRecentImageFile().toURI().toString());
-//            Bitmap imageBitmap = null;
-//            try {
-//                imageBitmap = MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), imageAsURI);
-//                imageBitmap = changeImageOrientation(imageBitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                Log.d("BITMAPS", "Could not retrieve most Recent Image");
-//            }
-//
-////            mImageView.setImageBitmap(imageBitmap);
-//            LiveSmileService ls = new LiveSmileService(this.getContext());
-//            ls.LoginOrCreate("YEET");
-//            ls.AddSmile("YEET", imageBitmap);
-//            SmileList retrievedList = ls.GetUserSmiles("YEET");
-//
-//            Smile newSmile = retrievedList.getSmiles().get(0);
-//            mImageView.setImageBitmap(newSmile.getImage());
-//
-//        }
+//                Smile newSmile = retrievedList.getSmiles().get(0);
+//                mImageView.setImageBitmap(newSmile.getImage());
+
+            }
+
+        }else {
+            //VIDEO WAS TAKEN
+            mVideoView.bringToFront();
+            mVideoView.setVideoURI(data.getData());
+            mVideoView.start();
+
+            LiveSmileService ls = new LiveSmileService(this.getContext());
+            ls.LoginOrCreate("YEET");
+//            ls.AddSmile("YEET", null, data.getData());
+        }
+
+
     }
 
     private Bitmap changeImageOrientation(Bitmap imageBitmap) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.couchbase.lite.Array;
 import com.couchbase.lite.Blob;
@@ -84,7 +85,7 @@ public class LiveSmileService implements SmileService {
                     e.printStackTrace();
                 }
                 URI uri = URI.create(uriString);
-                sl.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), uri)));
+                sl.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), android.net.Uri.parse(uri.toString()))));
             }
         }
 
@@ -125,7 +126,7 @@ public class LiveSmileService implements SmileService {
                             e.printStackTrace();
                         }
                         URI uri = URI.create(uriString);
-                        recents.addSmile((new VideoSmile(doc.getDate("postedDate"), uri)));
+                        recents.addSmile((new VideoSmile(doc.getDate("postedDate"), android.net.Uri.parse(uri.toString()))));
                     }
                 }
             }
@@ -168,7 +169,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile, URI videoFile) {
+    public void AddSmile(String id, Bitmap smile, android.net.Uri videoFile) {
         Blob b = null;
         if (videoFile == null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -178,9 +179,11 @@ public class LiveSmileService implements SmileService {
             b = new Blob("image", bs);
         }
         else if (smile == null){
+            Log.w("BLOB", "WE IN THIS");
             try {
-                b = new Blob("video", videoFile.toURL());
+                b = new Blob("video", new URL(videoFile.toString()));
             } catch (IOException e) {
+                Log.w("BLOB", "CAUGHT UP");
                 e.printStackTrace();
             }
         }
