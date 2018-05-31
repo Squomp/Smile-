@@ -40,7 +40,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            xmlns:facebook="http://schemas.android.com/apk/res-auto"
+            facebook:com_facebook_login_text="Continue With Facebook"
+            facebook:com_facebook_logout_text="Continue With Facebook"/>
     </LinearLayout>
 
 </FrameLayout>

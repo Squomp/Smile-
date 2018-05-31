@@ -24,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
+import com.facebook.Profile;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -49,6 +51,7 @@ public class SmileFragment extends Fragment {
     private File recentImageFile;
     private ImageView mImageView;
     private VideoView mVideoView;
+    private Profile profile = Profile.getCurrentProfile();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,8 +64,7 @@ public class SmileFragment extends Fragment {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         }
-        mVideoView = (VideoView) v.findViewById(R.id.mVideoView);
-        mImageView = (ImageView) v.findViewById(R.id.mImageView);
+
 
         return v;
     }
@@ -74,9 +76,12 @@ public class SmileFragment extends Fragment {
             Bundle args = getArguments();
 
             // initialize views
+            profile = Profile.getCurrentProfile();
             mContent = view.findViewById(R.id.smile_content);
             takeSmileButton = view.findViewById(R.id.takeSmileButton);
             takeVideoButton = view.findViewById(R.id.takeVideoButton);
+            mVideoView = view.findViewById(R.id.mVideoView);
+            mImageView = view.findViewById(R.id.mImageView);
 
             takeSmileButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -172,7 +177,8 @@ public class SmileFragment extends Fragment {
                     Log.d("BITMAPS", "Could not retrieve most Recent Image");
                 }
                 Log.e("STATE", getRecentImageFile().toString());
-                mImageView.bringToFront();
+                mVideoView.setVisibility(View.GONE);
+                mImageView.setVisibility(View.VISIBLE);
 //                ExifInterface exif = new ExifInterface(filename);
                 try {
                     ExifInterface exif = new ExifInterface(getRecentImageFile().getPath());
@@ -187,9 +193,8 @@ public class SmileFragment extends Fragment {
 
                 mImageView.setImageBitmap(imageBitmap);
                 LiveSmileService ls = new LiveSmileService(this.getContext());
-                ls.LoginOrCreate("YEET");
-                ls.AddSmile("YEET", imageBitmap, null);
-//                SmileList retrievedList = ls.GetUserSmiles("YEET");
+                ls.AddSmile(profile.getId(), imageBitmap, null);
+//                SmileList retrievedList = ls.GetUserSmiles(profile.getId());
 //                if (retrievedList.getSmiles().size() > 0) {
 //                    Smile newSmile = retrievedList.getSmiles().get(retrievedList.getSmiles().size() - 1);
 //                    if (newSmile instanceof PhotoSmile) {
@@ -202,13 +207,13 @@ public class SmileFragment extends Fragment {
 
         } else {
             //VIDEO WAS TAKEN
-            mVideoView.bringToFront();
+            mImageView.setVisibility(View.GONE);
+            mVideoView.setVisibility(View.VISIBLE);
             mVideoView.setVideoURI(data.getData());
             mVideoView.start();
 
             LiveSmileService ls = new LiveSmileService(this.getContext());
-            ls.LoginOrCreate("YEET");
-//            ls.AddSmile("YEET", null, data.getData());
+//            ls.AddSmile(profile.getId(), null, data.getData());
         }
 
 

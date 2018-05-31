@@ -39,6 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView profileTextView;
     private LiveSmileService service;
     private SmileList smiles;
+    private Profile profile = Profile.getCurrentProfile();
 
     public static Fragment newInstance() {
         Fragment frag = new ProfileFragment();
@@ -49,8 +50,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        service = new LiveSmileService(this.getContext());
-        service.LoginOrCreate("boi");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -63,6 +62,7 @@ public class ProfileFragment extends Fragment {
         mContent = view.findViewById(R.id.profile_content);
         profileImageView = view.findViewById(R.id.imageView);
         profileTextView = view.findViewById(R.id.profileNameTextView);
+        service = new LiveSmileService(this.getContext());
         if (savedInstanceState == null) {
             Bundle args = getArguments();
 
@@ -74,7 +74,7 @@ public class ProfileFragment extends Fragment {
             profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
         }
 
-        smiles = service.GetUserSmiles("boi");
+        smiles = service.GetUserSmiles(profile.getId());
         LinearLayout layout = view.findViewById(R.id.userSmiles);
 //        for (Smile s : smiles.getSmiles()) {
 //            ImageView img = new ImageView(this.getContext());

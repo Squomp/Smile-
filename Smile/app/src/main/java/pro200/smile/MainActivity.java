@@ -14,15 +14,18 @@ import android.view.MenuItem;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
+import com.facebook.Profile;
 
 import java.util.Calendar;
 
+import pro200.smile.service.LiveSmileService;
 import pro200.smile.service.NotificationReceiver;
 import pro200.smile.service.SmileService;
 import pro200.smile.service.StaticSmileService;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Profile profile = Profile.getCurrentProfile();
     private SmileService service;
     private PendingIntent pendingIntent;
     private BottomNavigationView mBottomNav;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
         @Override
         protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken,
-                AccessToken currentAccessToken) {
+                                                   AccessToken currentAccessToken) {
             if (currentAccessToken == null) {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
@@ -49,37 +52,40 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        service = new StaticSmileService(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mBottomNav = (BottomNavigationView) findViewById(R.id.navigation);
+        //Initialize views
+        mBottomNav = findViewById(R.id.navigation);
         mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        service = new LiveSmileService(getApplicationContext());
+        service.LoginOrCreate(profile.getId());
 
-        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 100,
-                new Intent(MainActivity.this, NotificationReceiver.class),
-                PendingIntent.FLAG_NO_CREATE) != null);
-        if(!alarmUp) {
-            startNotification();
-        }
+        startNotification();
+
         MenuItem selectedItem = mBottomNav.getMenu().getItem(0);
         selectFragment(selectedItem);
     }
 
     private void startNotification() {
+        boolean alarmUp = (PendingIntent.getBroadcast(MainActivity.this, 100,
+                new Intent(MainActivity.this, NotificationReceiver.class),
+                PendingIntent.FLAG_NO_CREATE) != null);
+        if (!alarmUp) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+            Intent myIntent = new Intent(MainActivity.this, NotificationReceiver.class);
+            pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 100, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent myIntent = new Intent(MainActivity.this, NotificationReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 100, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        }
     }
 
     private void selectFragment(MenuItem item) {
