@@ -27,7 +27,9 @@ import com.couchbase.lite.SelectResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -79,13 +81,15 @@ public class LiveSmileService implements SmileService {
             }
             else if (b.getContentType().equals("video")){
                 byte[] bytes = b.getContent();
-                String uriString = null;
-                try {
-                    uriString = new String(bytes, "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                Uri uri = Uri.parse(uriString);
+//                String uriString = null;
+//                try {
+//                    uriString = new String(bytes, "UTF-8");
+//                } catch (UnsupportedEncodingException e) {
+//                    e.printStackTrace();
+//                }
+//                Uri uri = Uri.parse(uriString);
+                InputStream is = new ByteArrayInputStream(bytes);
+                Uri uri = Uri.
                 sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uri));
             }
         }
@@ -182,8 +186,9 @@ public class LiveSmileService implements SmileService {
         else if (smile == null){
             Log.w("BLOB", "WE IN THIS");
             try {
-                URL url = new URL(videoFile.toString().replace("content:/", "file://"));
-                b = new Blob("video", url);
+//                String path = videoFile.getPath();
+//                URL url = new URL(path);
+                b = new Blob("video", context.getContentResolver().openInputStream(videoFile));
             } catch (IOException e) {
                 Log.w("BLOB", "CAUGHT UP");
                 e.printStackTrace();
