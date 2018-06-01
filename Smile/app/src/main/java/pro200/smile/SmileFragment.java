@@ -229,7 +229,7 @@ public class SmileFragment extends Fragment {
             mVideoView.start();
 
             LiveSmileService ls = new LiveSmileService(this.getContext());
-            ls.AddSmile(profile.getId(), null, data.getData());
+//            ls.AddSmile(profile.getId(), null, data.getData());
         }
 
 
