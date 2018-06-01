@@ -7,4 +7,5 @@
     <color name="colorBackground">#F9F9EF</color>
     <color name="black">#000000</color>
     <color name="lightGrey">#CCCCCC</color>
+    <color name="shadow">#33000000</color>
 </resources>
