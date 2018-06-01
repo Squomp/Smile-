@@ -3,6 +3,7 @@ package pro200.smile;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -54,12 +55,19 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("ProfileFragment", "Calling onViewCreated");
 
         //Initialize Views
         mContent = view.findViewById(R.id.profile_content);
         profileImageView = view.findViewById(R.id.imageView);
         profileTextView = view.findViewById(R.id.profileNameTextView);
         service = new LiveSmileService(this.getContext());
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d("ProfileFragment", "Calling onActivityCreated");
 
         if (savedInstanceState == null) {
             Bundle args = getArguments();
@@ -67,11 +75,9 @@ public class ProfileFragment extends Fragment {
             runAsyncTasks();
             profileTextView.setText(profile.getName());
         } else {
-            //profileImageView.setImageBitmap((Bitmap)savedInstanceState.getParcelable("ProfileBitmap"));
+            Log.d("ProfileFragment", "Instance Not null");
+            profileImageView.setImageBitmap((Bitmap) savedInstanceState.getParcelable("ProfileBitmap"));
         }
-
-        LinearLayout layout = view.findViewById(R.id.userSmiles);
-
     }
 
     private void runAsyncTasks() {

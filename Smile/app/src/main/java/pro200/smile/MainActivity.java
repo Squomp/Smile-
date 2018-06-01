@@ -10,6 +10,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectFragment(MenuItem item) {
         Fragment frag = null;
+        String tag = "";
 
         // update selected item
         mSelectedItemInt = item.getItemId();
@@ -97,19 +99,30 @@ public class MainActivity extends AppCompatActivity {
         // init corresponding fragment
         switch (mSelectedItemInt) {
             case R.id.navigation_home:
-                frag = HomeFragment.newInstance();
+                tag = "home";
+                frag = getSupportFragmentManager().findFragmentByTag(tag);
+                if (frag == null) {
+                    frag = HomeFragment.newInstance();
+                }
                 break;
             case R.id.navigation_smile:
-                frag = SmileFragment.newInstance();
+                tag = "smile";
+                frag = getSupportFragmentManager().findFragmentByTag(tag);
+                if (frag == null) {
+                    frag = SmileFragment.newInstance();
+                }
                 break;
             case R.id.navigation_profile:
-                frag = ProfileFragment.newInstance();
+                tag = "profile";
+                frag = getSupportFragmentManager().findFragmentByTag(tag);
+                if (frag == null) {
+                    frag = ProfileFragment.newInstance();
+                }
                 break;
         }
-
         if (frag != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.container, frag, frag.getTag());
+            ft.replace(R.id.container, frag, tag);
             ft.commit();
         }
     }
@@ -123,5 +136,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d("MainActivity", "Calling onSaveInstanceState");
     }
 }
