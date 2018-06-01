@@ -11,7 +11,7 @@ public class VideoSmile extends Smile {
         this.filePath = filePath;
     }
 
-    public android.net.Uri getImage() {
+    public android.net.Uri getFilePath() {
         return filePath;
     }
 

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -15,8 +16,10 @@ import android.widget.VideoView;
 
 import java.util.List;
 
+import pro200.smile.model.PhotoSmile;
 import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
+import pro200.smile.model.VideoSmile;
 import pro200.smile.service.LiveSmileService;
 
 
@@ -27,7 +30,7 @@ public class HomeFragment extends Fragment {
     private VideoView slideshowVideoView;
     private ImageView slideshowImageView;
     private GestureDetector gs;
-    private List<Smile> images;
+    private List<Smile> imagesAndVideoList;
     private int currentImageIndex = 0;
 
 
@@ -41,35 +44,56 @@ public class HomeFragment extends Fragment {
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         this.getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        final int halfWidth = displayMetrics.widthPixels/2;
+        final int halfWidth = displayMetrics.widthPixels / 2;
 
-//        slideshowButton.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if(images.size() != 0) {
-//
-//
-//                    if (gs.onTouchEvent(event)) {
-//                        if (event.getX() >= halfWidth) {
-//                            currentImageIndex++;
-//                            if (currentImageIndex == images.size()) {
-//                                currentImageIndex = 0;
-//                            }
-//                            slideshowButton.setImageBitmap(images.get(currentImageIndex).getImage());
-//                        } else {
-//                            currentImageIndex--;
-//                            if (currentImageIndex == -1) {
-//                                currentImageIndex = images.size() - 1;
-//                            }
-//                            slideshowButton.setImageBitmap(images.get(currentImageIndex).getImage());
-//                        }
-//
-//                    }
-//
-//                }
-//                return true;
-//            }
-//        });
+        slideshowButton.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (imagesAndVideoList.size() != 0) {
+                    if (gs.onTouchEvent(event)) {
+                        if (event.getX() >= halfWidth) {
+                            currentImageIndex++;
+                            if (currentImageIndex == imagesAndVideoList.size()) {
+                                currentImageIndex = 0;
+                            }
+                            if (imagesAndVideoList.get(currentImageIndex) instanceof PhotoSmile) {
+                                slideshowVideoView.setVisibility(View.GONE);
+                                slideshowImageView.setVisibility(View.VISIBLE);
+
+                                slideshowImageView.setImageBitmap(((PhotoSmile) imagesAndVideoList.get(currentImageIndex)).getImage());
+                            } else {
+                                slideshowImageView.setVisibility(View.GONE);
+                                slideshowVideoView.setVisibility(View.VISIBLE);
+
+                                slideshowVideoView.setVideoURI(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath());
+                            }
+
+                        } else {
+                            currentImageIndex--;
+                            if (currentImageIndex == -1) {
+                                currentImageIndex = imagesAndVideoList.size() - 1;
+                            }
+
+                            if (imagesAndVideoList.get(currentImageIndex) instanceof PhotoSmile) {
+                                slideshowVideoView.setVisibility(View.GONE);
+                                slideshowImageView.setVisibility(View.VISIBLE);
+
+                                slideshowImageView.setImageBitmap(((PhotoSmile) imagesAndVideoList.get(currentImageIndex)).getImage());
+                            } else {
+                                slideshowImageView.setVisibility(View.GONE);
+                                slideshowVideoView.setVisibility(View.VISIBLE);
+
+                                slideshowVideoView.setVideoURI(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath());
+                            }
+                        }
+
+                    }
+
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -85,9 +109,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void populateImageButton() {
-        LiveSmileService ls =  new LiveSmileService(this.getContext());
+        LiveSmileService ls = new LiveSmileService(this.getContext());
         SmileList retrievedList = ls.GetRandomSmiles(7);
-        images = retrievedList.getSmiles();
+        imagesAndVideoList = retrievedList.getSmiles();
 
     }
 

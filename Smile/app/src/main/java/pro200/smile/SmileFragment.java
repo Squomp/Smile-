@@ -201,7 +201,7 @@ public class SmileFragment extends Fragment {
                         default:
                             break;
                     }
-//                  
+//
                 } catch (IOException e) {
                     Log.d("STATE", "EXIF");
                     e.printStackTrace();
