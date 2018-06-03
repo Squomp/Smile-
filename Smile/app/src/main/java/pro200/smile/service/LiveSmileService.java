@@ -88,9 +88,9 @@ public class LiveSmileService implements SmileService {
 //                    e.printStackTrace();
 //                }
 //                Uri uri = Uri.parse(uriString);
-                InputStream is = new ByteArrayInputStream(bytes);
-                Uri uri = Uri.
-                sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uri));
+//                InputStream is = new ByteArrayInputStream(bytes);
+//                Uri uri;
+//                sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uri));
             }
         }
 
@@ -99,43 +99,7 @@ public class LiveSmileService implements SmileService {
 
     @Override
     public SmileList GetRandomSmiles(int count) {
-        if (recents.getSmiles().isEmpty()) {
-            Query q = QueryBuilder.select(SelectResult.expression(Meta.id))
-                    .from(DataSource.database(database))
-                    .where(Expression.property("type").equalTo(Expression.string("smile"))
-                            .and(Expression.property("sharing").equalTo(Expression.string("public"))));
-            ResultSet results = null;
-            try {
-                results = q.execute();
-            } catch (CouchbaseLiteException e) {
-                e.printStackTrace();
-            }
-            for (Result i : results.allResults()) {
-                MutableDocument doc = database.getDocument(i.getString("id")).toMutable();
-                Date d = doc.getDate("postedDate");
-                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 24 * 1000));
-                if (d.after(yesterday)){
-//                    byte[] bytes = doc.getBlob("data").getContent();
-//                    recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
-                    Blob b = doc.getBlob("data");
-                    if (b.getContentType().equals("image")) {
-                        byte[] bytes = b.getContent();
-                        recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
-                    }
-                    else if (b.getContentType().equals("video")){
-                        byte[] bytes = b.getContent();
-                        String uriString = null;
-                        try {
-                            uriString = new String(bytes, "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                        Uri uri = Uri.parse(uriString);
-                        recents.addSmile(new VideoSmile(doc.getDate("postedDate"), uri));
-                    }
-                }
-            }
-        }
+        GetRecents();
         SmileList toReturn = new SmileList();
         if (count >= recents.getSmiles().size()){
             return recents;
@@ -214,11 +178,53 @@ public class LiveSmileService implements SmileService {
             e.printStackTrace();
         }
 //        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
+        GetRecents();
         if (b.getContentType().equals("image")) {
             recents.addSmile(new PhotoSmile(smileDoc.getDate("postedDate"), smile));
         }
         else if (b.getContentType().equals("video")){
             recents.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), videoFile)));
+        }
+    }
+
+
+    private void GetRecents(){
+        if (recents.getSmiles().isEmpty()) {
+            Query q = QueryBuilder.select(SelectResult.expression(Meta.id))
+                    .from(DataSource.database(database))
+                    .where(Expression.property("type").equalTo(Expression.string("smile"))
+                            .and(Expression.property("sharing").equalTo(Expression.string("public"))));
+            ResultSet results = null;
+            try {
+                results = q.execute();
+            } catch (CouchbaseLiteException e) {
+                e.printStackTrace();
+            }
+            for (Result i : results.allResults()) {
+                MutableDocument doc = database.getDocument(i.getString("id")).toMutable();
+                Date d = doc.getDate("postedDate");
+                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 24 * 1000));
+                if (d.after(yesterday)){
+//                    byte[] bytes = doc.getBlob("data").getContent();
+//                    recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                    Blob b = doc.getBlob("data");
+                    if (b.getContentType().equals("image")) {
+                        byte[] bytes = b.getContent();
+                        recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
+                    }
+                    else if (b.getContentType().equals("video")){
+                        byte[] bytes = b.getContent();
+                        String uriString = null;
+                        try {
+                            uriString = new String(bytes, "UTF-8");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                        Uri uri = Uri.parse(uriString);
+                        recents.addSmile(new VideoSmile(doc.getDate("postedDate"), uri));
+                    }
+                }
+            }
         }
     }
 
