@@ -1,10 +1,12 @@
 package pro200.smile;
 
 import android.annotation.SuppressLint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.VideoView;
+
+import com.facebook.Profile;
 
 import java.util.List;
 
@@ -50,6 +54,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                Log.d("LISTENER", "CLICKED");
                 if (imagesAndVideoList.size() != 0) {
                     if (gs.onTouchEvent(event)) {
                         if (event.getX() >= halfWidth) {
@@ -65,8 +70,8 @@ public class HomeFragment extends Fragment {
                             } else {
                                 slideshowImageView.setVisibility(View.GONE);
                                 slideshowVideoView.setVisibility(View.VISIBLE);
-
-                                slideshowVideoView.setVideoURI(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath());
+                                Log.d("FILEPATH", (Uri.parse(((VideoSmile)imagesAndVideoList.get(currentImageIndex)).getFilePath())).toString());
+                                slideshowVideoView.setVideoURI(Uri.parse(((VideoSmile)imagesAndVideoList.get(currentImageIndex)).getFilePath()));
                             }
 
                         } else {
@@ -84,7 +89,7 @@ public class HomeFragment extends Fragment {
                                 slideshowImageView.setVisibility(View.GONE);
                                 slideshowVideoView.setVisibility(View.VISIBLE);
 
-                                slideshowVideoView.setVideoURI(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath());
+                                slideshowVideoView.setVideoURI(Uri.parse(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath()));
                             }
                         }
 
@@ -103,14 +108,14 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         gs = new GestureDetector(getActivity(), new ClickConfirmed());
-//        populateImageButton();
+        populateImageButton();
 
         return v;
     }
 
     private void populateImageButton() {
         LiveSmileService ls = new LiveSmileService(this.getContext());
-        SmileList retrievedList = ls.GetRandomSmiles(7);
+        SmileList retrievedList = ls.GetUserSmiles(Profile.getCurrentProfile().getId());
         imagesAndVideoList = retrievedList.getSmiles();
 
     }

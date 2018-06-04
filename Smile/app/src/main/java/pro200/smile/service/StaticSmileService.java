@@ -44,7 +44,7 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile, android.net.Uri videoFile) {
+    public void AddSmile(String id, Bitmap smile,String videoFile) {
         /* do nothing */
     }
 

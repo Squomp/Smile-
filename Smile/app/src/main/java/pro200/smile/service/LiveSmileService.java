@@ -81,16 +81,14 @@ public class LiveSmileService implements SmileService {
             }
             else if (b.getContentType().equals("video")){
                 byte[] bytes = b.getContent();
-//                String uriString = null;
-//                try {
-//                    uriString = new String(bytes, "UTF-8");
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                }
-//                Uri uri = Uri.parse(uriString);
-//                InputStream is = new ByteArrayInputStream(bytes);
-//                Uri uri;
-//                sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uri));
+                String uriString = null;
+                try {
+                    uriString = new String(bytes, "ISO-8859-1");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uriString));
             }
         }
 
@@ -138,7 +136,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile, android.net.Uri videoFile) {
+    public void AddSmile(String id, Bitmap smile, String videoFile) {
         Blob b = null;
         if (videoFile == null) {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -149,14 +147,16 @@ public class LiveSmileService implements SmileService {
         }
         else if (smile == null){
             Log.w("BLOB", "WE IN THIS");
-            try {
+//            try {
 //                String path = videoFile.getPath();
 //                URL url = new URL(path);
-                b = new Blob("video", context.getContentResolver().openInputStream(videoFile));
-            } catch (IOException e) {
-                Log.w("BLOB", "CAUGHT UP");
-                e.printStackTrace();
-            }
+//                Log.w("POST", context.getContentResolver().openInputStream(videoFile).toString());
+                String uri = videoFile;
+                b = new Blob("video",uri.getBytes());
+//            } catch (IOException e) {
+//                Log.w("BLOB", "CAUGHT UP");
+//                e.printStackTrace();
+//            }
         }
         MutableDocument smileDoc = new MutableDocument()
                 .setString("type", "smile")
@@ -220,8 +220,8 @@ public class LiveSmileService implements SmileService {
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
                         }
-                        Uri uri = Uri.parse(uriString);
-                        recents.addSmile(new VideoSmile(doc.getDate("postedDate"), uri));
+
+                        recents.addSmile(new VideoSmile(doc.getDate("postedDate"), uriString));
                     }
                 }
             }
