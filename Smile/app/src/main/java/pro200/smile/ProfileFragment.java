@@ -33,6 +33,7 @@ import pro200.smile.service.SmileService;
 public class ProfileFragment extends Fragment {
 
     private View mContent;
+    private LinearLayout profileLayout;
     private ImageView profileImageView;
     private TextView profileTextView;
     private LiveSmileService service;
@@ -58,7 +59,8 @@ public class ProfileFragment extends Fragment {
         Log.d("ProfileFragment", "Calling onViewCreated");
 
         //Initialize Views
-        mContent = view.findViewById(R.id.profile_content);
+        profileLayout = view.findViewById(R.id.profileLayout);
+        mContent = view.findViewById(R.id.profileLayout);
         profileImageView = view.findViewById(R.id.imageView);
         profileTextView = view.findViewById(R.id.profileNameTextView);
         service = new LiveSmileService(this.getContext());
@@ -84,7 +86,7 @@ public class ProfileFragment extends Fragment {
         LoadProfileImage profileImageLoader = new LoadProfileImage(profileImageView);
         profileImageLoader.execute(profile.getProfilePictureUri(300, 300).toString());
 
-        LoadUserImages userImageLoader = new LoadUserImages(this.getActivity(), service);
+        LoadUserImages userImageLoader = new LoadUserImages(this.getActivity(), service, profileLayout);
         userImageLoader.execute();
     }
 }

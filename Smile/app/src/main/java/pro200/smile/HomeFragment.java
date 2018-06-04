@@ -60,17 +60,18 @@ public class HomeFragment extends Fragment {
                             if (currentImageIndex == imagesAndVideoList.size()) {
                                 currentImageIndex = 0;
                             }
-                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
-                                slideshowVideoView.setVisibility(View.GONE);
-                                slideshowImageView.setVisibility(View.VISIBLE);
+                            slideshowImageView.setVisibility(View.VISIBLE);
+                            slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
 
-                                slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
-                            } else {
-                                slideshowImageView.setVisibility(View.GONE);
-                                slideshowVideoView.setVisibility(View.VISIBLE);
+//                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
+//                                slideshowVideoView.setVisibility(View.GONE);
+//                            }
+//                            else {
+//                                slideshowImageView.setVisibility(View.GONE);
+//                                slideshowVideoView.setVisibility(View.VISIBLE);
 //                                Log.d("FILEPATH", (Uri.parse(((Smile)imagesAndVideoList.get(currentImageIndex)).getFilePath())).toString());
 //                                slideshowVideoView.setVideoURI(Uri.parse(((Smile)imagesAndVideoList.get(currentImageIndex)).getFilePath()));
-                            }
+//                            }
 
                         } else {
                             currentImageIndex--;
@@ -78,21 +79,19 @@ public class HomeFragment extends Fragment {
                                 currentImageIndex = imagesAndVideoList.size() - 1;
                             }
 
-                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
-                                slideshowVideoView.setVisibility(View.GONE);
-                                slideshowImageView.setVisibility(View.VISIBLE);
+                            slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
+//                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
+//                                slideshowVideoView.setVisibility(View.GONE);
+//                                slideshowImageView.setVisibility(View.VISIBLE);
 
-                                slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
-                            } else {
-                                slideshowImageView.setVisibility(View.GONE);
-                                slideshowVideoView.setVisibility(View.VISIBLE);
-
+//                            } else {
+//                                slideshowImageView.setVisibility(View.GONE);
+//                                slideshowVideoView.setVisibility(View.VISIBLE);
+//
 //                                slideshowVideoView.setVideoURI(Uri.parse(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath()));
-                            }
+//                            }
                         }
-
                     }
-
                 }
                 return true;
             }

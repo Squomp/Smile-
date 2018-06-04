@@ -3,6 +3,7 @@ package pro200.smile.async;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.facebook.Profile;
 
@@ -16,10 +17,12 @@ public class LoadUserImages extends AsyncTask<Void, Void, SmileList> {
 
     private WeakReference<Activity> weakActivity;
     private SmileService service;
+    private LinearLayout layout;
 
-    public LoadUserImages(Activity activity, SmileService service) {
+    public LoadUserImages(Activity activity, SmileService service, LinearLayout layout) {
         this.weakActivity = new WeakReference<>(activity);
         this.service = service;
+        this.layout = layout;
     }
 
     @Override
@@ -37,8 +40,8 @@ public class LoadUserImages extends AsyncTask<Void, Void, SmileList> {
             }
             for (Smile s : result.getSmiles()) {
                 ImageView img = new ImageView(activity.getApplicationContext());
-//                img.setImageBitmap();
-//                layout.addView(img);
+                img.setImageBitmap(s.getImage());
+                layout.addView(img);
             }
         }
     }
