@@ -3,7 +3,8 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:background="@drawable/profile_background_shape">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
