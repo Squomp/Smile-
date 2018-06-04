@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.couchbase.lite.Array;
 import com.couchbase.lite.Blob;
@@ -13,10 +11,8 @@ import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.DataSource;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseConfiguration;
-import com.couchbase.lite.Document;
 import com.couchbase.lite.Expression;
 import com.couchbase.lite.Meta;
-import com.couchbase.lite.MetaExpression;
 import com.couchbase.lite.MutableArray;
 import com.couchbase.lite.MutableDocument;
 import com.couchbase.lite.Query;
@@ -27,21 +23,14 @@ import com.couchbase.lite.SelectResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
-import pro200.smile.model.PhotoSmile;
 import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
-import pro200.smile.model.VideoSmile;
 
 public class LiveSmileService implements SmileService {
 
@@ -75,21 +64,9 @@ public class LiveSmileService implements SmileService {
             String s = (String)o;
             MutableDocument smileDoc = database.getDocument(s).toMutable();
             Blob b = smileDoc.getBlob("data");
-            if (b.getContentType().equals("image")) {
-                byte[] bytes = b.getContent();
-                sl.addSmile(new PhotoSmile(smileDoc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
-            }
-            else if (b.getContentType().equals("video")){
-                byte[] bytes = b.getContent();
-                String uriString = null;
-                try {
-                    uriString = new String(bytes, "ISO-8859-1");
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+            byte[] bytes = b.getContent();
+            sl.addSmile(new Smile(smileDoc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
 
-                sl.addSmile(new VideoSmile(smileDoc.getDate("postedDate"), uriString));
-            }
         }
 
         return sl;
@@ -136,28 +113,13 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile, String videoFile) {
-        Blob b = null;
-        if (videoFile == null) {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
-            byte[] bitmapdata = bos.toByteArray();
-            ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
-            b = new Blob("image", bs);
-        }
-        else if (smile == null){
-            Log.w("BLOB", "WE IN THIS");
-//            try {
-//                String path = videoFile.getPath();
-//                URL url = new URL(path);
-//                Log.w("POST", context.getContentResolver().openInputStream(videoFile).toString());
-                String uri = videoFile;
-                b = new Blob("video",uri.getBytes());
-//            } catch (IOException e) {
-//                Log.w("BLOB", "CAUGHT UP");
-//                e.printStackTrace();
-//            }
-        }
+    public void AddSmile(String id, Bitmap smile) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
+        byte[] bitmapdata = bos.toByteArray();
+        ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+        Blob b = new Blob("image", bs);
+
         MutableDocument smileDoc = new MutableDocument()
                 .setString("type", "smile")
                 .setBlob("data", b)
@@ -177,16 +139,9 @@ public class LiveSmileService implements SmileService {
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
-//        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
         GetRecents();
-        if (b.getContentType().equals("image")) {
-            recents.addSmile(new PhotoSmile(smileDoc.getDate("postedDate"), smile));
-        }
-        else if (b.getContentType().equals("video")){
-            recents.addSmile((new VideoSmile(smileDoc.getDate("postedDate"), videoFile)));
-        }
+        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
     }
-
 
     private void GetRecents(){
         if (recents.getSmiles().isEmpty()) {
@@ -208,21 +163,9 @@ public class LiveSmileService implements SmileService {
 //                    byte[] bytes = doc.getBlob("data").getContent();
 //                    recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
                     Blob b = doc.getBlob("data");
-                    if (b.getContentType().equals("image")) {
-                        byte[] bytes = b.getContent();
-                        recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
-                    }
-                    else if (b.getContentType().equals("video")){
-                        byte[] bytes = b.getContent();
-                        String uriString = null;
-                        try {
-                            uriString = new String(bytes, "UTF-8");
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
+                    byte[] bytes = b.getContent();
+                    recents.addSmile(new Smile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
 
-                        recents.addSmile(new VideoSmile(doc.getDate("postedDate"), uriString));
-                    }
                 }
             }
         }

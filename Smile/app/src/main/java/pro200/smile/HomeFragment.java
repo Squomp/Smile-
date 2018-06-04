@@ -20,10 +20,8 @@ import com.facebook.Profile;
 
 import java.util.List;
 
-import pro200.smile.model.PhotoSmile;
 import pro200.smile.model.Smile;
 import pro200.smile.model.SmileList;
-import pro200.smile.model.VideoSmile;
 import pro200.smile.service.LiveSmileService;
 
 
@@ -62,16 +60,16 @@ public class HomeFragment extends Fragment {
                             if (currentImageIndex == imagesAndVideoList.size()) {
                                 currentImageIndex = 0;
                             }
-                            if (imagesAndVideoList.get(currentImageIndex) instanceof PhotoSmile) {
+                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
                                 slideshowVideoView.setVisibility(View.GONE);
                                 slideshowImageView.setVisibility(View.VISIBLE);
 
-                                slideshowImageView.setImageBitmap(((PhotoSmile) imagesAndVideoList.get(currentImageIndex)).getImage());
+                                slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
                             } else {
                                 slideshowImageView.setVisibility(View.GONE);
                                 slideshowVideoView.setVisibility(View.VISIBLE);
-                                Log.d("FILEPATH", (Uri.parse(((VideoSmile)imagesAndVideoList.get(currentImageIndex)).getFilePath())).toString());
-                                slideshowVideoView.setVideoURI(Uri.parse(((VideoSmile)imagesAndVideoList.get(currentImageIndex)).getFilePath()));
+//                                Log.d("FILEPATH", (Uri.parse(((Smile)imagesAndVideoList.get(currentImageIndex)).getFilePath())).toString());
+//                                slideshowVideoView.setVideoURI(Uri.parse(((Smile)imagesAndVideoList.get(currentImageIndex)).getFilePath()));
                             }
 
                         } else {
@@ -80,16 +78,16 @@ public class HomeFragment extends Fragment {
                                 currentImageIndex = imagesAndVideoList.size() - 1;
                             }
 
-                            if (imagesAndVideoList.get(currentImageIndex) instanceof PhotoSmile) {
+                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
                                 slideshowVideoView.setVisibility(View.GONE);
                                 slideshowImageView.setVisibility(View.VISIBLE);
 
-                                slideshowImageView.setImageBitmap(((PhotoSmile) imagesAndVideoList.get(currentImageIndex)).getImage());
+                                slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
                             } else {
                                 slideshowImageView.setVisibility(View.GONE);
                                 slideshowVideoView.setVisibility(View.VISIBLE);
 
-                                slideshowVideoView.setVideoURI(Uri.parse(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath()));
+//                                slideshowVideoView.setVideoURI(Uri.parse(((VideoSmile) imagesAndVideoList.get(currentImageIndex)).getFilePath()));
                             }
                         }
 

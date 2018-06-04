@@ -60,10 +60,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Initialize views
+        Profile.fetchProfileForCurrentAccessToken();
         mBottomNav = findViewById(R.id.navigation);
         mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         service = new LiveSmileService(getApplicationContext());
-        service.LoginOrCreate(profile.getId());
+        if(Profile.getCurrentProfile() != null) {
+            service.LoginOrCreate(Profile.getCurrentProfile().getId());
+        }
 
         startNotification();
 

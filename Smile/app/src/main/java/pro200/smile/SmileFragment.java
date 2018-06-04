@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -20,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
@@ -28,13 +26,9 @@ import com.facebook.Profile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import pro200.smile.model.PhotoSmile;
-import pro200.smile.model.Smile;
-import pro200.smile.model.SmileList;
 import pro200.smile.service.LiveSmileService;
 
 import static android.app.Activity.RESULT_OK;
@@ -209,7 +203,7 @@ public class SmileFragment extends Fragment {
 
                 mImageView.setImageBitmap(imageBitmap);
                 LiveSmileService ls = new LiveSmileService(this.getContext());
-                ls.AddSmile(profile.getId(), imageBitmap, null);
+                ls.AddSmile(profile.getId(), imageBitmap);
 //                SmileList retrievedList = ls.GetUserSmiles(profile.getId());
 //                if (retrievedList.getSmiles().size() > 0) {
 //                    Smile newSmile = retrievedList.getSmiles().get(retrievedList.getSmiles().size() - 1);
@@ -221,20 +215,7 @@ public class SmileFragment extends Fragment {
 
             }
 
-        } else {
-            //VIDEO WAS TAKEN
-            mImageView.setVisibility(View.GONE);
-            mVideoView.setVisibility(View.VISIBLE);
-            mVideoView.setVideoURI(data.getData());
-            mVideoView.start();
-
-
-            LiveSmileService ls = new LiveSmileService(this
-                    .getContext());
-            ls.AddSmile(profile.getId(), null, data.getData().toString());
         }
-
-
     }
 
     private Bitmap changeImageOrientation(Bitmap imageBitmap, int degrees) {
