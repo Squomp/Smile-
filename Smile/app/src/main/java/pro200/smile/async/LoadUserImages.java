@@ -30,7 +30,7 @@ public class LoadUserImages extends AsyncTask<Void, Void, SmileList> {
 
     @Override
     protected SmileList doInBackground(Void... voids) {
-        SmileList smiles = service.GetUserSmiles(Profile.getCurrentProfile().getId());
+        SmileList smiles = service.getUserSmiles(Profile.getCurrentProfile().getId());
         return smiles;
     }
 

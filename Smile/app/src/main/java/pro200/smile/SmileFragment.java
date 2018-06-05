@@ -2,6 +2,7 @@ package pro200.smile;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -196,8 +198,8 @@ public class SmileFragment extends Fragment {
 
                 mImageView.setImageBitmap(imageBitmap);
                 LiveSmileService ls = new LiveSmileService(this.getContext());
-                ls.AddSmile(profile.getId(), imageBitmap);
-//                SmileList retrievedList = ls.GetUserSmiles(profile.getId());
+                ls.addSmile(profile.getId(), imageBitmap);
+//                SmileList retrievedList = ls.getUserSmiles(profile.getId());
 //                if (retrievedList.getSmiles().size() > 0) {
 //                    Smile newSmile = retrievedList.getSmiles().get(retrievedList.getSmiles().size() - 1);
 //                    if (newSmile instanceof PhotoSmile) {
@@ -230,4 +232,5 @@ public class SmileFragment extends Fragment {
     public void setRecentImageFile(File recentImageFile) {
         this.recentImageFile = recentImageFile;
     }
+
 }

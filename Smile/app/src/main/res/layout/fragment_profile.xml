@@ -22,8 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="5dp"
-            android:paddingTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -56,9 +56,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:paddingTop="15dp"
                     android:layout_marginStart="5dp"
                     android:fontFamily="@font/headland_one"
+                    android:paddingTop="15dp"
                     android:text="@string/profile_name"
                     android:textColor="@color/black"
                     android:textSize="25sp" />
