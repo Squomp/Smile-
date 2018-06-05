@@ -77,7 +77,7 @@ public class LiveSmileService implements SmileService {
         getRecents();
         SmileList toReturn = new SmileList();
         if (recents.getSmiles().size() > 0) {
-            if (start != -1) {
+            if (start == -1) {
                 Random r = new Random();
                 start = r.nextInt(recents.getSmiles().size() - 1);
             } 

@@ -32,7 +32,9 @@ public class HomeFragment extends Fragment {
     private ImageView slideshowImageView;
     private GestureDetector gs;
     private List<Smile> imagesAndVideoList;
-    private int currentImageIndex = 0;
+    private int currentImageIndex = -1;
+    private LiveSmileService ls;
+    private final int NUMBER_OF_IMAGES_RETRIEVED = 2;
 
 
     public static Fragment newInstance() {
@@ -57,7 +59,11 @@ public class HomeFragment extends Fragment {
                         if (event.getX() >= halfWidth) {
                             currentImageIndex++;
                             if (currentImageIndex == imagesAndVideoList.size()) {
-                                currentImageIndex = 0;
+//                                currentImageIndex = 0;
+                                SmileList retrievedList = ls.getRandomSmiles(NUMBER_OF_IMAGES_RETRIEVED);
+                                for (int i = 0; i < retrievedList.getSmiles().size(); i++) {
+                                    imagesAndVideoList.add(retrievedList.getSmiles().get(i));
+                                }
                             }
                             slideshowImageView.setVisibility(View.VISIBLE);
                             slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
@@ -76,7 +82,14 @@ public class HomeFragment extends Fragment {
                             currentImageIndex--;
                             if (currentImageIndex == -1) {
                                 currentImageIndex = 0;
+                            } else if(currentImageIndex == -2) {
+                                currentImageIndex = 0;
+                                slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
+                            }else{
+                                    slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
                             }
+
+
 //                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
 //                                slideshowVideoView.setVisibility(View.GONE);
 //                                slideshowImageView.setVisibility(View.VISIBLE);
@@ -101,6 +114,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
+        ls = new LiveSmileService(this.getContext());
         gs = new GestureDetector(getActivity(), new ClickConfirmed());
         populateImageButton();
 
@@ -108,8 +122,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void populateImageButton() {
-        LiveSmileService ls = new LiveSmileService(this.getContext());
-        SmileList retrievedList = ls.getRandomSmiles(Integer.MAX_VALUE);
+        SmileList retrievedList = ls.getRandomSmiles(NUMBER_OF_IMAGES_RETRIEVED);
         imagesAndVideoList = retrievedList.getSmiles();
 
     }
@@ -119,6 +132,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //Initialize Views
+
         slideshowButton = view.findViewById(R.id.slideshowButton);
         slideshowImageView = view.findViewById(R.id.slideshowImageView);
         slideshowVideoView = view.findViewById(R.id.slideshowVideoView);
