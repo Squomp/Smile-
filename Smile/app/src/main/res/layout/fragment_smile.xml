@@ -39,7 +39,7 @@
                 android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 android:contentDescription="@string/title_smile"
-                android:src="@android:drawable/ic_menu_gallery" />
+                android:src="@mipmap/camera_placeholder" />
 
         </FrameLayout>
 
@@ -51,12 +51,15 @@
             <Button
                 android:id="@+id/takeSmileButton"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"
                 android:layout_weight="1"
                 android:background="@drawable/smile_button_shape"
+                android:fontFamily="@font/headland_one"
                 android:gravity="center"
-                android:text="@string/take_smile_button" />
+                android:text="@string/take_smile_button"
+                android:textAlignment="center"
+                android:textSize="35sp" />
         </LinearLayout>
 
     </LinearLayout>

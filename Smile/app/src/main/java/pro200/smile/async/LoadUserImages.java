@@ -50,7 +50,7 @@ public class LoadUserImages extends AsyncTask<Void, Void, SmileList> {
                 img.setPadding(1 * dp,1 * dp,1 * dp,1 * dp);
                 img.setBackgroundColor(Color.BLACK);
                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                img.setMaxHeight(300 * dp);
+                img.setMaxHeight(350 * dp);
                 img.setAdjustViewBounds(true);
                 img.setImageBitmap(s.getImage());
 

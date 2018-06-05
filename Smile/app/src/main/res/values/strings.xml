@@ -3,9 +3,10 @@
     <string name="title_home">Home</string>
     <string name="title_smile">Smile!</string>
     <string name="title_profile">Profile</string>
-    <string name="take_smile_button">Smile!</string>
+    <string name="take_smile_button">Post Smile</string>
     <string name="take_video_button">Video!</string>
     <string name="profile_name">Name</string>
     <string name="facebook_app_id">195064921123711</string>
     <string name="fb_login_protocol_scheme">fb195064921123711</string>
+    <string name="explore">Explore</string>
 </resources>

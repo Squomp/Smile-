@@ -8,4 +8,5 @@
     <color name="black">#000000</color>
     <color name="lightGrey">#CCCCCC</color>
     <color name="shadow">#33000000</color>
+    <color name="colorProfileBackground">#E8ECEC</color>
 </resources>
