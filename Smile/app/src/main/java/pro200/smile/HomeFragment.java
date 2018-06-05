@@ -75,10 +75,8 @@ public class HomeFragment extends Fragment {
                         } else {
                             currentImageIndex--;
                             if (currentImageIndex == -1) {
-                                currentImageIndex = imagesAndVideoList.size() - 1;
+                                currentImageIndex = 0;
                             }
-
-                            slideshowImageView.setImageBitmap(((Smile) imagesAndVideoList.get(currentImageIndex)).getImage());
 //                            if (imagesAndVideoList.get(currentImageIndex) instanceof Smile) {
 //                                slideshowVideoView.setVisibility(View.GONE);
 //                                slideshowImageView.setVisibility(View.VISIBLE);
