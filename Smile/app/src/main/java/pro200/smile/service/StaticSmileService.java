@@ -19,7 +19,7 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public SmileList GetUserSmiles(String id) {
+    public SmileList getUserSmiles(String id) {
         SmileList smileList = new SmileList();
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
@@ -28,7 +28,7 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public SmileList GetRandomSmiles(int count) {
+    public SmileList getRandomSmiles(int count) {
         SmileList smileList = new SmileList();
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_home_black_24dp)));
         smileList.addSmile(new Smile(new Date(), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_profile_black_24dp)));
@@ -37,12 +37,12 @@ public class StaticSmileService implements SmileService {
     }
 
     @Override
-    public void LoginOrCreate(String id) {
+    public void loginOrCreate(String id) {
         /* do nothing */
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile) {
+    public void addSmile(String id, Bitmap smile) {
         /* do nothing */
     }
 

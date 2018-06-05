@@ -1,9 +1,10 @@
 package pro200.smile.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.preference.PreferenceManager;
 
 import com.couchbase.lite.Array;
 import com.couchbase.lite.Blob;
@@ -23,9 +24,6 @@ import com.couchbase.lite.SelectResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Random;
 
@@ -53,7 +51,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public SmileList GetUserSmiles(String id) {
+    public SmileList getUserSmiles(String id) {
         MutableDocument userDoc = database.getDocument(id).toMutable();
 
         Array arr = userDoc.getArray("smiles");
@@ -72,24 +70,22 @@ public class LiveSmileService implements SmileService {
         return sl;
     }
 
+    Random r = new Random();
+    private int start = r.nextInt(recents.getSmiles().size() - 1);
     @Override
-    public SmileList GetRandomSmiles(int count) {
-        GetRecents();
+    public SmileList getRandomSmiles(int count) {
+        getRecents();
         SmileList toReturn = new SmileList();
         if (count >= recents.getSmiles().size()){
             return recents;
         }
-        Random r = new Random();
         if (!recents.getSmiles().isEmpty()) {
-            int start = r.nextInt(recents.getSmiles().size() - 1);
-            int i = 0;
             while (toReturn.getSmiles().size() < count) {
                 if (start + count < recents.getSmiles().size()) {
-                    toReturn.addSmile(recents.getSmiles().get(start + i));
-                    i++;
+                    toReturn.addSmile(recents.getSmiles().get(start));
+                    start++;
                 } else {
                     start = 0;
-                    i = 0;
                 }
             }
         }
@@ -97,7 +93,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void LoginOrCreate(String id) {
+    public void loginOrCreate(String id) {
         if (database.getDocument(id) == null) {
             MutableDocument mutableDoc = new MutableDocument(id)
                     .setString("type", "user")
@@ -113,7 +109,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile) {
+    public void addSmile(String id, Bitmap smile) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
         byte[] bitmapdata = bos.toByteArray();
@@ -139,11 +135,11 @@ public class LiveSmileService implements SmileService {
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
-        GetRecents();
+        getRecents();
         recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
     }
 
-    private void GetRecents(){
+    private void getRecents(){
         if (recents.getSmiles().isEmpty()) {
             Query q = QueryBuilder.select(SelectResult.expression(Meta.id))
                     .from(DataSource.database(database))
@@ -158,7 +154,7 @@ public class LiveSmileService implements SmileService {
             for (Result i : results.allResults()) {
                 MutableDocument doc = database.getDocument(i.getString("id")).toMutable();
                 Date d = doc.getDate("postedDate");
-                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 24 * 1000));
+                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 72 * 1000));
                 if (d.after(yesterday)){
 //                    byte[] bytes = doc.getBlob("data").getContent();
 //                    recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
@@ -186,4 +182,5 @@ public class LiveSmileService implements SmileService {
             e.printStackTrace();
         }
     }
+
 }
