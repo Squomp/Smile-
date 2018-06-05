@@ -9,4 +9,7 @@
     <string name="facebook_app_id">195064921123711</string>
     <string name="fb_login_protocol_scheme">fb195064921123711</string>
     <string name="explore">Explore</string>
+    <string name="settings_public">Public</string>
+    <string name="settings_friends_only">Friends Only</string>
+    <string name="settings_private">Private</string>
 </resources>
