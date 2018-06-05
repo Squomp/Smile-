@@ -72,6 +72,8 @@ public class LiveSmileService implements SmileService {
         return sl;
     }
 
+    Random r = new Random();
+    private int start = r.nextInt(recents.getSmiles().size() - 1);
     @Override
     public SmileList GetRandomSmiles(int count) {
         GetRecents();
@@ -79,17 +81,13 @@ public class LiveSmileService implements SmileService {
         if (count >= recents.getSmiles().size()){
             return recents;
         }
-        Random r = new Random();
         if (!recents.getSmiles().isEmpty()) {
-            int start = r.nextInt(recents.getSmiles().size() - 1);
-            int i = 0;
             while (toReturn.getSmiles().size() < count) {
                 if (start + count < recents.getSmiles().size()) {
-                    toReturn.addSmile(recents.getSmiles().get(start + i));
-                    i++;
+                    toReturn.addSmile(recents.getSmiles().get(start));
+                    start++;
                 } else {
                     start = 0;
-                    i = 0;
                 }
             }
         }
@@ -158,7 +156,7 @@ public class LiveSmileService implements SmileService {
             for (Result i : results.allResults()) {
                 MutableDocument doc = database.getDocument(i.getString("id")).toMutable();
                 Date d = doc.getDate("postedDate");
-                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 24 * 1000));
+                Date yesterday = new Date(System.currentTimeMillis() - (60 * 60 * 72 * 1000));
                 if (d.after(yesterday)){
 //                    byte[] bytes = doc.getBlob("data").getContent();
 //                    recents.addSmile(new PhotoSmile(doc.getDate("postedDate"), BitmapFactory.decodeByteArray(bytes, 0, bytes.length)));
