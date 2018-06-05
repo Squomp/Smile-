@@ -19,10 +19,10 @@
 
         <FrameLayout
             android:layout_width="fill_parent"
+            android:layout_height="384dp"
             android:layout_margin="10dp"
-            android:padding="2dp"
             android:background="@color/black"
-            android:layout_height="384dp">
+            android:padding="2dp">
 
             <VideoView
                 android:id="@+id/mVideoView"
@@ -36,31 +36,25 @@
                 android:id="@+id/mImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
                 android:layout_gravity="center"
                 android:contentDescription="@string/title_smile"
+                android:scaleType="centerCrop"
                 android:src="@mipmap/camera_placeholder" />
 
         </FrameLayout>
 
-        <LinearLayout
+        <Button
+            android:id="@+id/takeSmileButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/takeSmileButton"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/smile_button_shape"
-                android:fontFamily="@font/headland_one"
-                android:gravity="center"
-                android:text="@string/take_smile_button"
-                android:textAlignment="center"
-                android:textSize="35sp" />
-        </LinearLayout>
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/smile_button_shape"
+            android:fontFamily="@font/headland_one"
+            android:gravity="center"
+            android:text="@string/take_smile_button"
+            android:textAlignment="center"
+            android:textSize="35sp" />
 
     </LinearLayout>
 

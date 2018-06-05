@@ -34,10 +34,12 @@ public class LiveSmileService implements SmileService {
 
     private String smileDB = "SmileDB";
 
+    private SmileList recents = new SmileList();
+
     private Context context;
     private Database database;
 
-    private SmileList recents = new SmileList();
+    private int start = -1;
 
     public LiveSmileService(Context context) {
         this.context = context;
@@ -70,22 +72,26 @@ public class LiveSmileService implements SmileService {
         return sl;
     }
 
-    Random r = new Random();
-    private int start = r.nextInt(recents.getSmiles().size() - 1);
     @Override
     public SmileList getRandomSmiles(int count) {
         getRecents();
         SmileList toReturn = new SmileList();
-        if (count >= recents.getSmiles().size()){
-            return recents;
-        }
-        if (!recents.getSmiles().isEmpty()) {
-            while (toReturn.getSmiles().size() < count) {
-                if (start + count < recents.getSmiles().size()) {
-                    toReturn.addSmile(recents.getSmiles().get(start));
-                    start++;
-                } else {
-                    start = 0;
+        if (recents.getSmiles().size() > 0) {
+            if (start != -1) {
+                Random r = new Random();
+                start = r.nextInt(recents.getSmiles().size() - 1);
+            } 
+            if (count >= recents.getSmiles().size()){
+                return recents;
+            }
+            if (!recents.getSmiles().isEmpty()) {
+                while (toReturn.getSmiles().size() < count) {
+                    if (start + count < recents.getSmiles().size()) {
+                        toReturn.addSmile(recents.getSmiles().get(start));
+                        start++;
+                    } else {
+                        start = 0;
+                    }
                 }
             }
         }
@@ -136,7 +142,9 @@ public class LiveSmileService implements SmileService {
             e.printStackTrace();
         }
         getRecents();
-        recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
+        if (smileDoc.getString("sharing").equals("public")) {
+            recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
+        }
     }
 
     private void getRecents(){
