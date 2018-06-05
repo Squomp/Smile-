@@ -3,7 +3,6 @@ package pro200.smile;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -22,7 +21,6 @@ import java.util.Calendar;
 import pro200.smile.service.LiveSmileService;
 import pro200.smile.service.NotificationReceiver;
 import pro200.smile.service.SmileService;
-import pro200.smile.service.StaticSmileService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mBottomNav.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         service = new LiveSmileService(getApplicationContext());
         if(Profile.getCurrentProfile() != null) {
-            service.LoginOrCreate(Profile.getCurrentProfile().getId());
+            service.loginOrCreate(Profile.getCurrentProfile().getId());
         }
 
         startNotification();

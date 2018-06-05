@@ -1,9 +1,10 @@
 package pro200.smile.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.preference.PreferenceManager;
 
 import com.couchbase.lite.Array;
 import com.couchbase.lite.Blob;
@@ -23,9 +24,6 @@ import com.couchbase.lite.SelectResult;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Random;
 
@@ -53,7 +51,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public SmileList GetUserSmiles(String id) {
+    public SmileList getUserSmiles(String id) {
         MutableDocument userDoc = database.getDocument(id).toMutable();
 
         Array arr = userDoc.getArray("smiles");
@@ -73,8 +71,8 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public SmileList GetRandomSmiles(int count) {
-        GetRecents();
+    public SmileList getRandomSmiles(int count) {
+        getRecents();
         SmileList toReturn = new SmileList();
         if (count >= recents.getSmiles().size()){
             return recents;
@@ -97,7 +95,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void LoginOrCreate(String id) {
+    public void loginOrCreate(String id) {
         if (database.getDocument(id) == null) {
             MutableDocument mutableDoc = new MutableDocument(id)
                     .setString("type", "user")
@@ -113,7 +111,7 @@ public class LiveSmileService implements SmileService {
     }
 
     @Override
-    public void AddSmile(String id, Bitmap smile) {
+    public void addSmile(String id, Bitmap smile) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         smile.compress(Bitmap.CompressFormat.PNG, 0, bos);
         byte[] bitmapdata = bos.toByteArray();
@@ -139,11 +137,11 @@ public class LiveSmileService implements SmileService {
         } catch (CouchbaseLiteException e) {
             e.printStackTrace();
         }
-        GetRecents();
+        getRecents();
         recents.addSmile(new Smile(smileDoc.getDate("postedDate"), smile));
     }
 
-    private void GetRecents(){
+    private void getRecents(){
         if (recents.getSmiles().isEmpty()) {
             Query q = QueryBuilder.select(SelectResult.expression(Meta.id))
                     .from(DataSource.database(database))
@@ -181,4 +179,5 @@ public class LiveSmileService implements SmileService {
             e.printStackTrace();
         }
     }
+
 }

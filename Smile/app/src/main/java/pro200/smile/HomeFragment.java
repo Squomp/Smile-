@@ -1,7 +1,6 @@
 package pro200.smile;
 
 import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -112,7 +111,7 @@ public class HomeFragment extends Fragment {
 
     private void populateImageButton() {
         LiveSmileService ls = new LiveSmileService(this.getContext());
-        SmileList retrievedList = ls.GetUserSmiles(Profile.getCurrentProfile().getId());
+        SmileList retrievedList = ls.getUserSmiles(Profile.getCurrentProfile().getId());
         imagesAndVideoList = retrievedList.getSmiles();
 
     }
