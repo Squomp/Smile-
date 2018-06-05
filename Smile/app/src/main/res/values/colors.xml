@@ -9,4 +9,5 @@
     <color name="lightGrey">#CCCCCC</color>
     <color name="shadow">#33000000</color>
     <color name="colorProfileBackground">#E8ECEC</color>
+    <color name="transparent">#00000000</color>
 </resources>
