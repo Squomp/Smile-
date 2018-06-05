@@ -1,7 +1,10 @@
 package pro200.smile.async;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -35,13 +38,23 @@ public class LoadUserImages extends AsyncTask<Void, Void, SmileList> {
     protected void onPostExecute(SmileList result) {
         if (result != null) {
             Activity activity = weakActivity.get();
-            if(activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
                 return;
             }
             for (Smile s : result.getSmiles()) {
+                int dp = (int) activity.getApplicationContext().getResources().getDisplayMetrics().density;
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                lp.setMargins(10 * dp, 10 * dp, 10 * dp, 10 * dp);
+                lp.gravity = Gravity.CENTER;
                 ImageView img = new ImageView(activity.getApplicationContext());
+                img.setPadding(1 * dp,1 * dp,1 * dp,1 * dp);
+                img.setBackgroundColor(Color.BLACK);
+                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                img.setMaxHeight(350 * dp);
+                img.setAdjustViewBounds(true);
                 img.setImageBitmap(s.getImage());
-                layout.addView(img);
+
+                layout.addView(img, lp);
             }
         }
     }

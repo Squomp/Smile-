@@ -169,6 +169,11 @@ public class LiveSmileService implements SmileService {
         }
     }
 
+    public String getPreference(String id){
+        MutableDocument userDoc = database.getDocument(id).toMutable();
+        return userDoc.getString("sharing");
+    }
+
     @Override
     public void changePreference(String id, String newPreference) {
         MutableDocument userDoc = database.getDocument(id).toMutable();
