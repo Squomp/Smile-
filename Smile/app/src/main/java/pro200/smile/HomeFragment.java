@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
 
     private void populateImageButton() {
         LiveSmileService ls = new LiveSmileService(this.getContext());
-        SmileList retrievedList = ls.getUserSmiles(Profile.getCurrentProfile().getId());
+        SmileList retrievedList = ls.getRandomSmiles(Integer.MAX_VALUE);
         imagesAndVideoList = retrievedList.getSmiles();
 
     }
